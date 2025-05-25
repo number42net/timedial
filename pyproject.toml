@@ -1,0 +1,38 @@
+[project]
+name = "timedial"
+version = "0.0.1"
+description = "Your description here"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+
+dependencies = ["watchdog==6.0.0", "pydantic==2.11.5"]
+
+[project.scripts]
+timedial_create_user = "timedial.accounts.create_user:create_user"
+timedial_create_user_daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
+timedial_pam_module = "timedial.accounts.pam_module:pam_module"
+timedial_welcome_user = "timedial.accounts.welcome_user:main"
+
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = ["ruff==0.11.11", "mypy==1.15.0"]
+
+[tool.mypy]
+strict = true
+#ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 140
+select = [
+    "E",   # pycodestyle (errors)
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # bugbear
+    "N",   # pep8-naming
+    "D",   # pydocstyle (docstring style)
+    "RUF", # ruff-specific rules
+]

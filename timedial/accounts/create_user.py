@@ -1,0 +1,117 @@
+"""TimeDial project.
+
+Copyright (c) 2025 Martin Miedema
+Repository: https://github.com/number42net/timedial
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
+
+import crypt
+import getpass
+import os
+import pwd
+import time
+
+from timedial.accounts import account
+
+SSH = any(var in os.environ for var in ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"])
+
+
+def create_user() -> None:
+    """Interactively create a new user account for the TimeDial system.
+
+    This function prompts the administrator to input details for a new user,
+    including a username, password (with confirmation), optional real name,
+    optional email address, and an optional SSH public key if run in an SSH session.
+
+    The function performs validation to ensure:
+    - The username contains only alphanumeric characters.
+    - The username does not already exist in the account database.
+    - The password and its confirmation match.
+
+    Once all inputs are collected and validated:
+    - The password is securely hashed using SHA-512.
+    - A UserModel instance is created and saved using `account.write()`.
+    - The function waits for the system user to be recognized via `pwd.getpwnam()`.
+
+    On successful creation, the user is notified and prompted to log in.
+
+    Raises:
+        None directly, but will print error messages for input validation failures.
+
+    """
+    print()
+    # Username
+    username = ""
+    while not username:
+        username = input("New username (a-z / 0-9 only): ").strip()
+        if not account.validate_username(username):
+            print("Error: Username must contain only letters and numbers.\n")
+            username = ""
+        try:
+            account.read(username)
+            print("Error, username already exists\n")
+        except FileNotFoundError:
+            # User doesn't exist, so we can continue
+            break
+
+    # Real name:
+    realname: str | None = input("Realname (optional): ").strip()
+    if not realname:
+        realname = None
+
+    # Password
+    password = ""
+    while not password:
+        password = getpass.getpass("Password: ")
+        confirm = getpass.getpass("Confirm Password: ")
+        if password != confirm:
+            print("Error: Passwords do not match.\n")
+            password = ""
+
+    # Email
+    email: str | None = input("Email address (optional): ").strip()
+    if not email:
+        email = None
+
+    # Pubkeys
+    pubkeys: list[str] = []
+    if SSH:
+        key = input("Public SSH key (optional): ").strip()
+        if key:
+            pubkeys.append(key)
+
+    # Put it all together:
+    account.write(
+        account.UserModel(
+            username=username,
+            password_hash=crypt.crypt(password, crypt.mksalt(crypt.METHOD_SHA512)),
+            email=email,
+            pubkeys=pubkeys,
+            realname=realname,
+        )
+    )
+
+    time.sleep(1)
+    while True:
+        try:
+            pwd.getpwnam(username)
+            break
+        except KeyError:
+            print("Waiting for user to be created, this should only take a few seconds...")
+            time.sleep(5)
+
+    print()
+    print(f"Your new user is ready for use. You'll be logged out and can log back in with: {username}")
+    print()

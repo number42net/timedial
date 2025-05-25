@@ -1,0 +1,30 @@
+repos:
+  # Pre-commit's official built-in hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        files: \.py$
+      - id: end-of-file-fixer
+        files: \.py$
+      - id: check-yaml
+        files: \.ya?ml$
+      - id: check-added-large-files
+      - id: debug-statements
+        files: \.py$
+
+  # Ruff for linting, formatting, and import sorting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.11 # Make sure this matches or is compatible with ruff==0.11.11
+    hooks:
+      - id: ruff
+        files: \.py$
+
+  # Mypy for static type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+      - id: mypy
+        language: system
+        files: \.py$
+        # args: ["--strict", "--explicit-package-bases", "--package", "timedial"]
