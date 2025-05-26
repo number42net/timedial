@@ -4,15 +4,16 @@ services:
   timedial:
     build: .
     container_name: timedial
+    hostname: timedial
     ports:
-      - "2222:22"   # SSH
-      - "2322:23"   # Telnet
-      - "2424:24"   # Raw socket
+      - "22:22"   # SSH
+      - "23:23"   # Telnet
+      - "24:24"   # Raw socket
     restart: unless-stopped
     volumes:
-      - type: bind
-        source: data
-        target: /tmpdata
+      # - type: bind
+      #   source: data
+      #   target: /tmpdata
         # read_only: true
       - timedial-data:/data
 volumes:

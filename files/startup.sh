@@ -11,10 +11,6 @@ fixperms() {
     chmod 0711 /home
 }
 
-# Set hostname
-echo "timedial.org" /etc/hostname
-hostname timedial.org
-
 # Init process
 if [ -d /init ]; then
     echo "Starting init process..."
@@ -29,7 +25,6 @@ fi
 while IFS=: read -r username _ uid _ _ _ home shell; do
   # Skip system accounts and non-user shells
   if [ "$uid" -ge 1000 ] && [ "$username" != "nobody" ]; then
-    echo "Deleting user: $username (UID: $uid)"
     userdel -r "$username" 2>/dev/null
     if [ $? -eq 0 ]; then
       echo "User $username deleted successfully."
@@ -42,21 +37,11 @@ done < /etc/passwd
 fixperms # Run the fixperms function
 mv /menu.yaml /data/menu.yaml
 
-# Final security steps:
-# apt-get -qq remove -y gcc 
-# apt-get -qq remove -y g++ 
-# apt-get -qq remove -y make
-# apt-get -qq remove -y curl
-# apt-get -qq remove -y wget
-# apt-get -qq remove -y python3-pip
-# apt-get -qq autoremove -y
-chmod 000 /bin/su
-
 # Start services
 /sbin/syslogd # Syslog daemon
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
-socat TCP-LISTEN:24,reuseaddr,fork EXEC:'/sbin/agetty - -l /bin/login' & # Raw connection daemon
+socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon
 timedial_create_user_daemon & # User creation daemon
 
 tail -F /var/log/messages # Show syslog

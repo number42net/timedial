@@ -82,6 +82,10 @@ RUN python3.11 -m pip install .
 RUN useradd -ms "/usr/local/bin/timedial_create_user" -u 999 guest
 RUN echo "guest:guest" | chpasswd guest
 
+# Clean-up
+RUN apt-get -qq remove -y gcc g++ make curl wget python3-pip; apt-get -qq autoremove -y
+RUN chmod 000 /bin/su
+
 # Create guestusers group:
 RUN groupadd guestusers
 
