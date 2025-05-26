@@ -27,6 +27,11 @@ from timedial.interface.banner import banner
 from timedial.interface.menu import MenuItem, load_menu
 
 
+def goodbye() -> None:
+    print("\n\n\nThank you for visting TimeDial.org, hope to see you soon again! \n")
+    os.system("pkill -u $(whoami)")
+
+
 def welcome() -> None:
     """Greet the currently logged-in user."""
     try:
@@ -50,7 +55,7 @@ def welcome() -> None:
     print()
 
 
-def generate_menu(menu: MenuItem) -> MenuItem | None:
+def generate_menu(menu: MenuItem, exit: bool = False) -> MenuItem | None:
     if not menu.items:
         raise Exception("Can only generate a memu on a menu")
 
@@ -66,12 +71,17 @@ def generate_menu(menu: MenuItem) -> MenuItem | None:
         else:
             print(f"{item} - {data.name}")
         choices[item] = data
-    print("\n0 - Return to main menu")
+    if not exit:
+        print("\n0 - Return to main menu")
+    else:
+        print("\n0 - Disconnect")
 
     print()
     while True:
         result = input("Choice: ")
-        if result == "0":
+        if result == "0" and exit:
+            goodbye()
+        elif result == "0":
             return None
         elif not result.isdigit() or int(result) not in choices:
             print(f"Not a valid choice: {result}")
@@ -80,21 +90,21 @@ def generate_menu(menu: MenuItem) -> MenuItem | None:
 
 
 def menu() -> None:
-    menu = load_menu()
+    try:
+        menu = load_menu()
 
-    result = None
-    while True:
-        if not result:
-            result = generate_menu(menu)
-        elif result.items:
-            result = generate_menu(result)
-        elif result.command:
-            return_code = os.system(" ".join(result.command.exec))
-            if return_code:
-                print(f"Execution resulted in non-zero return value: {return_code}")
-                input("\nPress enter to continue...")
-            result = generate_menu(menu)
+        result = None
+        while True:
+            if not result:
+                result = generate_menu(menu, exit=True)
+            elif result.items:
+                result = generate_menu(result)
+            elif result.command:
+                return_code = os.system(" ".join(result.command.exec))
+                if return_code:
+                    print(f"Execution resulted in non-zero return value: {return_code}")
+                    input("\nPress enter to continue...")
+                result = generate_menu(menu, exit=True)
 
-
-if __name__ == "__main__":
-    menu()
+    except KeyboardInterrupt:
+        goodbye()
