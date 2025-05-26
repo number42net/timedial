@@ -2,6 +2,17 @@ mainmenu:
   id: "main"
   name: "Main Menu"
   items:
+    - id: "sims"
+      name: "Simulators"
+      items:
+        - id: "pdp11-bsd211"
+          name: "PDP11 with 2.11BSD"
+          command:
+            publisher: "BSD"
+            original_date: "1978"
+            version: "2.11"
+            version_date: "1992"
+            exec: ["/simh/run.sh", "pdp11-bsd211"]
     - id: "shells"
       name: "Shells"
       items:

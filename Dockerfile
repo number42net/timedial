@@ -15,12 +15,20 @@ RUN apt-get update && apt-get install -y \
     python3.11 \
     python3-pip \
     socat \
+    vim \
+    expect \
+    libpcap-dev \
     && apt-get clean
+
+# Install simh
+COPY /files/simh /simh
+RUN ls -lh /simh
+RUN chmod u+x /simh/build.sh && /simh/build.sh
+RUN chmod -R go-w /simh
 
 # Install specific games, emulators, etc.
 # These are seperate to speed up container creation
 RUN apt-get install -y frotz
-RUN apt-get install -y simh
 
 # Prevent legal message on first login
 RUN rm /etc/legal
