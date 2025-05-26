@@ -56,6 +56,10 @@ def create_user() -> None:
     username = ""
     while not username:
         username = input("New username (a-z / 0-9 only): ").strip()
+        if username == "root":
+            print("Haha, nice try...")
+            exit(1)
+
         if not account.validate_username(username):
             print("Error: Username must contain only letters and numbers.\n")
             username = ""

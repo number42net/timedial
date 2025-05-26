@@ -1,30 +1,18 @@
 version: '3.8'
 
 services:
-  ssh_telnet:
+  timedial:
     build: .
     container_name: timedial
     ports:
-      - "2222:22"   # SSH
-      - "2323:23"   # Telnet
+      - "22:22"   # SSH
+      - "23:23"   # Telnet
     restart: unless-stopped
     volumes:
-      - type: bind
-        source: data/ssh
-        target: /etc/ssh
-        read_only: true
-      - type: bind
-        source: data/issue.net
-        target: /etc/issue.net
-        read_only: true
-      - type: bind
-        source: data/update-motd.d
-        target: /etc/update-motd.d
-        read_only: true
-      - type: bind
-        source: data/root_authorized_keys
-        target: /root/.ssh/authorized_keys
-        read_only: true
-      - type: bind
-        source: data/guests
-        target: /etc/guests
+      # - type: bind
+      #   source: data
+      #   target: /init
+        # read_only: true
+      - timedial-data:/data
+volumes:
+  timedial-data:

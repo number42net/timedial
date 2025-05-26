@@ -1,0 +1,21 @@
+Banner /etc/issue.net
+UsePAM yes
+ChallengeResponseAuthentication yes
+
+KbdInteractiveAuthentication no
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+PrintMotd no
+
+PermitRootLogin no
+PrintLastLog no
+
+AcceptEnv TERM
+
+AuthorizedKeysCommand /usr/local/bin/timedial_get_pub_keys
+AuthorizedKeysCommandUser guest
+
+HostKey /data/ssh_host_keys/ssh_host_rsa_key
+HostKey /data/ssh_host_keys/ssh_host_ecdsa_key
+HostKey /data/ssh_host_keys/ssh_host_ed25519_key

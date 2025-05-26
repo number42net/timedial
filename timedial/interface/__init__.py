@@ -16,20 +16,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
-
-import subprocess
-
-from timedial.accounts import account
-
-
-def main() -> None:
-    """Greet the currently logged-in user."""
-    try:
-        login_user = subprocess.check_output(["logname"]).decode().strip()
-        user = account.read(login_user)
-
-    except Exception:
-        exit(1)
-
-    name = user.realname if user.realname else user.username
-    print(f"Welcome to TimeDial.org {name}!")

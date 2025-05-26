@@ -1,0 +1,35 @@
+mainmenu:
+  id: "main"
+  name: "Main Menu"
+  items:
+    - id: "shells"
+      name: "Shells"
+      items:
+        - id: "bash"
+          name: "BASH (Bourne Again Shell)"
+          command:
+            publisher: "GNU"
+            original_date: "1989"
+            version: "5.1.16"
+            version_date: "2020"
+            exec: ["/usr/bin/bash"]
+        - id: "tcsh"
+          name: "TCSH (C Shell)"
+          command:
+            publisher: "Bill Joy"
+            original_date: "1975"
+            version: "6.21.00"
+            version_date: "2019"
+            exec: ["/bin/tcsh"]
+
+    - id: "games"
+      name: "Games"
+      items:
+        - id: "zork1"
+          name: "Zork I: The Great Underground Empire"
+          command:
+            publisher: "Infocom"
+            original_date: "1980"
+            version: "v88"
+            version_date: "1983"
+            exec: ["/usr/games/frotz", "/data/zork/Zork1.dat"]

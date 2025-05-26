@@ -4,13 +4,14 @@ version = "0.0.1"
 description = "Your description here"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 
-dependencies = ["watchdog==6.0.0", "pydantic==2.11.5"]
+dependencies = ["watchdog==6.0.0", "pydantic==2.11.5", "ruamel.yaml==0.18.11"]
 
 [project.scripts]
 timedial_create_user = "timedial.accounts.create_user:create_user"
 timedial_create_user_daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
 timedial_pam_module = "timedial.accounts.pam_module:pam_module"
-timedial_welcome_user = "timedial.accounts.welcome_user:main"
+timedial_login = "timedial.interface.initial_menu:menu"
+timedial_get_pub_keys = "timedial.accounts.get_pub_keys:main"
 
 
 [build-system]
@@ -36,3 +37,5 @@ select = [
     "D",   # pydocstyle (docstring style)
     "RUF", # ruff-specific rules
 ]
+[tool.ruff.lint.pydocstyle]
+convention = "google"

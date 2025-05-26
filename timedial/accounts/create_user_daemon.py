@@ -27,7 +27,7 @@ from pathlib import Path
 from watchdog.events import DirCreatedEvent, FileCreatedEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-WATCH_DIR = "/etc/guests/"
+WATCH_DIR = "/data/guests/"
 USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+$")
 
 # Set up syslog logging
@@ -63,9 +63,30 @@ def process_file(path: str) -> None:
 
     try:
         logger.info(f"Creating user: {username}")
-        subprocess.run(["useradd", "-m", username], check=True)
+        subprocess.run(
+            ["useradd", "-m", "-s", "/usr/local/bin/timedial_login", "-G", "guestusers", username],
+            check=True,
+        )
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create user {username}: {e}")
+
+    try:
+        logger.info(f"Set user file ownership: {username}")
+        subprocess.run(
+            ["chown", f"{username}:guest", path],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to set ownership for user file {username}: {e}")
+
+    try:
+        logger.info(f"Set user home dir permissions: {username}")
+        subprocess.run(
+            ["chmod", "0700", f"/home/{username}"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to set permissions for user file {username}: {e}")
 
 
 class GuestFileHandler(FileSystemEventHandler):

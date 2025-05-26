@@ -1,7 +1,7 @@
 auth optional pam_faildelay.so delay=30000000
 # PAM configuration for the Secure Shell service
 
-# Try regular users first
+# Try guest users:
 auth    [success=done default=ignore] pam_exec.so quiet expose_authtok /usr/local/bin/timedial_pam_module
 
 # Standard Un*x authentication.
@@ -30,15 +30,6 @@ session    optional     pam_keyinit.so force revoke
 
 # Standard Un*x session setup and teardown.
 @include common-session
-
-# Print the message of the day upon successful login.
-# This includes a dynamically generated part from /run/motd.dynamic
-# and a static (admin-editable) part from /etc/motd.
-session    optional     pam_motd.so  motd=/run/motd.dynamic
-session    optional     pam_motd.so noupdate
-
-# Print the status of the user's mailbox upon successful login.
-session    optional     pam_mail.so standard noenv # [1]
 
 # Set up user limits from /etc/security/limits.conf.
 session    required     pam_limits.so

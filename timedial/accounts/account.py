@@ -23,7 +23,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field, PrivateAttr, field_validator
 
-GUEST_DIR = "/etc/guests"
+GUEST_DIR = "/data/guests"
 USERNAME_REGEX = re.compile(r"^[a-z0-9]+$")
 
 
@@ -43,7 +43,7 @@ class UserModel(BaseModel):
     username: str = Field(frozen=True)
     password_hash: str
     email: str | None = None
-    pubkeys: list[str] | None = None
+    pubkeys: list[str] = []
     realname: str | None = None
     _path: str = PrivateAttr()
 

@@ -1,4 +1,3 @@
-auth optional pam_faildelay.so delay=30000000
 #
 # The PAM configuration file for the Shadow `login' service
 #
@@ -7,10 +6,10 @@ auth optional pam_faildelay.so delay=30000000
 # (Replaces the `FAIL_DELAY' setting from login.defs)
 # Note that other modules may require another minimal delay. (for example,
 # to disable any delay, you should add the nodelay option to pam_unix)
-auth       optional   pam_faildelay.so  delay=3000000
+auth optional   pam_faildelay.so  delay=3000000
 
-# Try regular users first
-auth    [success=done default=ignore] pam_exec.so expose_authtok /usr/local/bin/timedial_pam_module
+# Try try guest users:
+auth [success=done default=ignore] pam_exec.so expose_authtok /usr/local/bin/timedial_pam_module
 
 # Outputs an issue file prior to each login prompt (Replaces the
 # ISSUE_FILE option from login.defs). Uncomment for use
@@ -29,13 +28,6 @@ session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux
 
 # Sets the loginuid process attribute
 session    required     pam_loginuid.so
-
-# Prints the message of the day upon successful login.
-# (Replaces the `MOTD_FILE' option in login.defs)
-# This includes a dynamically generated part from /run/motd.dynamic
-# and a static (admin-editable) part from /etc/motd.
-session    optional   pam_motd.so motd=/run/motd.dynamic
-session    optional   pam_motd.so noupdate
 
 # SELinux needs to intervene at login time to ensure that the process
 # starts in the proper default security context. Only sessions which are
@@ -66,12 +58,6 @@ session       required   pam_env.so readenv=1 envfile=/etc/default/locale
 # (Replaces the `CONSOLE_GROUPS' option in login.defs)
 auth       optional   pam_group.so
 
-# Uncomment and edit /etc/security/time.conf if you need to set
-# time restraint on logins.
-# (Replaces the `PORTTIME_CHECKS_ENAB' option from login.defs
-# as well as /etc/porttime)
-# account    requisite  pam_time.so
-
 # Uncomment and edit /etc/security/access.conf if you need to
 # set access limits.
 # (Replaces /etc/login.access file)
@@ -80,16 +66,6 @@ auth       optional   pam_group.so
 # Sets up user limits according to /etc/security/limits.conf
 # (Replaces the use of /etc/limits in old login)
 session    required   pam_limits.so
-
-# Prints the status of the user's mailbox upon successful login
-# (Replaces the `MAIL_CHECK_ENAB' option from login.defs). 
-#
-# This also defines the MAIL environment variable
-# However, userdel also needs MAIL_DIR and MAIL_FILE variables
-# in /etc/login.defs to make sure that removing a user 
-# also removes the user's mail spool file.
-# See comments in /etc/login.defs
-session    optional   pam_mail.so standard
 
 # Create a new session keyring.
 session    optional   pam_keyinit.so force revoke
