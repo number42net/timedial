@@ -8,7 +8,8 @@ fi
 cd ~/$1
 
 echo
-echo "Now starting simh: $1"
+echo "Now starting your personal $1"
+cat ~/$1/login-info.txt
 echo "To exit, press CTR+E"
 echo
 read -n 1 -s -r -p "Press any key to continue..."
