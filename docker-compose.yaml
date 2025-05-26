@@ -11,10 +11,12 @@ services:
       - "24:24"   # Raw socket
     restart: unless-stopped
     volumes:
-      # - type: bind
-      #   source: data
-      #   target: /tmpdata
-        # read_only: true
+      - type: bind
+        source: data
+        target: /sync
+        read_only: true
       - timedial-data:/data
+      - timedial-home:/home
 volumes:
   timedial-data:
+  timedial-home:

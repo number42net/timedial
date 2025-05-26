@@ -25,13 +25,13 @@ fi
 while IFS=: read -r username _ uid _ _ _ home shell; do
   # Skip system accounts and non-user shells
   if [ "$uid" -ge 1000 ] && [ "$username" != "nobody" ]; then
-    userdel -r "$username" 2>/dev/null
+    userdel "$username" 2>/dev/null
     if [ $? -eq 0 ]; then
       echo "User $username deleted successfully."
     else
       echo "Failed to delete $username or user is currently logged in."
     fi
-  fi
+  fi  
 done < /etc/passwd
 
 fixperms # Run the fixperms function

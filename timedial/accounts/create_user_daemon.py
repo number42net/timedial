@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 import logging.handlers
+import os
 import re
 import subprocess
 import time
@@ -63,29 +64,26 @@ def process_file(path: str) -> None:
 
     try:
         logger.info(f"Creating user: {username}")
-        subprocess.run(
-            ["useradd", "-m", "-s", "/usr/local/bin/timedial_login", "-G", "guestusers", username],
-            check=True,
-        )
+        subprocess.run(["useradd", "-M", "-s", "/usr/local/bin/timedial_login", "-G", "guestusers", username], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create user {username}: {e}")
 
     try:
         logger.info(f"Set user file ownership: {username}")
-        subprocess.run(
-            ["chown", f"{username}:guest", path],
-            check=True,
-        )
+        subprocess.run(["chown", f"{username}:guest", path], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to set ownership for user file {username}: {e}")
 
     try:
-        logger.info(f"Set user home dir permissions: {username}")
-        subprocess.run(
-            ["chmod", "0700", f"/home/{username}"],
-            check=True,
-        )
-    except subprocess.CalledProcessError as e:
+        homedir = f"/home/{username}"
+        if not os.path.isdir(homedir):
+            logger.info(f"Creating home directory: {username}")
+            os.mkdir(homedir)
+
+        logger.info(f"Setting home directory permission : {username}")
+        os.chmod(homedir, 0o700)
+        subprocess.run(["chown", "-R", f"{username}:{username}", homedir], check=True)
+    except Exception as e:
         logger.error(f"Failed to set permissions for user file {username}: {e}")
 
 
