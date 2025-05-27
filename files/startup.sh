@@ -37,6 +37,14 @@ done < /etc/passwd
 fixperms # Run the fixperms function
 mv /menu.yaml /data/menu.yaml
 
+# Prepare simh
+bash /opt/simh/build.sh
+
+# Clean-up, only for amd64
+if [ "$TARGETARCH" = "amd64" ]; then \
+      apt-get -qq remove -y gcc g++ make curl wget python3-pip git; apt-get -qq autoremove -y; \
+fi
+
 # Start services
 /sbin/syslogd # Syslog daemon
 service ssh start # SSH daemon

@@ -1,31 +1,35 @@
 #!/bin/bash
 
-cd /simh
-mkdir tmp
-cd tmp
+data_dir=/data/simh-bin
+simh_dir=/opt/simh
+expected_file=$simh_dir/expected-emulators
 
-if [ -d /simh_init ]; then
-    ln -s /simh_init/211bsd_rpethset.tgz .
-    ln -s /simh_init/v3.9-0.tar.gz .
-else
-    echo "Downloading requirements..."
-    wget https://www.retro11.de/data/oc_w11/oskits/211bsd_rpethset.tgz
-    wget https://github.com/simh/simh/archive/refs/tags/v3.9-0.tar.gz
+echo "Preparing simh..."
+cd $simh_dir
+
+buildsimh() {
+    echo "Building $1..."
+    if [[ ! -d $simh_dir/git ]]; then
+        echo "Cloning repo..."
+        git clone -q https://github.com/simh/simh.git git
+    fi
+    cd git
+    make -j$(nproc) $1
+    cp BIN/$1 $data_dir
+}
+
+if [[ ! -d $data_dir ]]; then
+    mkdir $data_dir
 fi
 
-# Build simh
-tar -xf v3.9-0.tar.gz
-cd simh-3.9-0
-make pdp11
-cp BIN/pdp11 /usr/bin
+echo "Copying disk images..."
+rsync -a /sync/simh/ $simh_dir/
 
-# Prepare PDP11 BSD 2.11
-cd /simh/pdp11-bsd211
-tar -xvzf /simh/tmp/211bsd_rpethset.tgz ./211bsd_rpeth.dsk
-chmod a+x start
+while read -r emulator; do
+  echo "Processing $emulator..."
+  if [[ ! -x "$data_dir/$emulator" ]]; then
+    buildsimh $emulator
+  fi
+  cp $data_dir/$emulator /usr/bin/ 
+done < "$expected_file"
 
-# Run script
-chmod a+x /simh/run.sh
-
-# Clean-up
-rm -rf /simh/tmp

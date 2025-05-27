@@ -97,15 +97,14 @@ def create_user() -> None:
             pubkeys.append(key)
 
     # Put it all together:
-    account.write(
-        account.UserModel(
-            username=username,
-            password_hash=crypt.crypt(password, crypt.mksalt(crypt.METHOD_SHA512)),
-            email=email,
-            pubkeys=pubkeys,
-            realname=realname,
-        )
+    model = account.UserModel(
+        username=username,
+        password_hash=crypt.crypt(password, crypt.mksalt(crypt.METHOD_SHA512)),
+        email=email,
+        pubkeys=pubkeys,
+        realname=realname,
     )
+    model.write()
 
     time.sleep(1)
     while True:

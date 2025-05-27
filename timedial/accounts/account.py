@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import re
+import time
 from typing import Any
 
 from pydantic import BaseModel, Field, PrivateAttr, field_validator
@@ -45,6 +46,7 @@ class UserModel(BaseModel):
     email: str | None = None
     pubkeys: list[str] = []
     realname: str | None = None
+    lastlogin: float = time.time()
     _path: str = PrivateAttr()
 
     def model_post_init(self, __context: Any) -> None:
@@ -70,6 +72,16 @@ class UserModel(BaseModel):
             raise ValueError("Username must contain only lowercase letters and digits.")
         return value
 
+    def write(self) -> None:
+        """Write the given UserModel to its corresponding JSON file."""
+        with open(self._path, "w") as f:
+            f.write(self.model_dump_json(indent=4))
+
+    def new_login(self) -> None:
+        """Reset the last login time and write the data."""
+        self.lastlogin = time.time()
+        self.write()
+
 
 def validate_username(username: str) -> bool:
     """Check whether a username matches the allowed pattern.
@@ -82,17 +94,6 @@ def validate_username(username: str) -> bool:
 
     """
     return bool(USERNAME_REGEX.fullmatch(username))
-
-
-def write(model: UserModel) -> None:
-    """Write the given UserModel to its corresponding JSON file.
-
-    Args:
-        model (UserModel): The user model to serialize and write.
-
-    """
-    with open(model._path, "w") as f:
-        f.write(model.model_dump_json(indent=4))
 
 
 def read(username: str) -> UserModel:

@@ -37,6 +37,7 @@ def welcome() -> None:
     try:
         login_user = subprocess.check_output(["logname"]).decode().strip()
         user = account.read(login_user)
+        user.new_login()
 
     except Exception as exc:
         print(f"Failed to identify username: {exc}")
