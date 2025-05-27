@@ -13,17 +13,15 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
   fi  
 done < /etc/passwd
 
-mv /menu.yaml $DATA_DIR/menu.yaml
 
-# Prepare simh
+# Copy game data, diskimages, etc.
+echo "Copying disk images and game data..."
 bash /opt/simh/build.sh
+mv /menu.yaml $DATA_DIR/menu.yaml
+rsync -a --no-perms $SYNC_DIR/simh $SYNC_DIR/games /opt/
 
-# Clean-up, only for amd64
-if [ "$TARGETARCH" = "amd64" ]; then \
-      apt-get -qq remove -y gcc g++ make curl wget python3-pip git; apt-get -qq autoremove -y; \
-fi
-
-# Enforce permissions
+# Enforce permissions and remove unwanted packages
+chmod -R go-w /opt/
 chown root:guest $DATA_DIR
 chmod 0751 $DATA_DIR
 chmod 0500 $DATA_DIR/ssh_host_keys
@@ -33,8 +31,9 @@ chmod 0771 $DATA_DIR/guests
 chmod 0640 $DATA_DIR/guests/*
 chmod 0711 /home
 chmod 0700 /mnt
-
-ls -lha /opt > /round3
+if [ "$TARGETARCH" = "amd64" ]; then \
+      apt-get -qq remove -y gcc g++ make curl wget python3-pip git; apt-get -qq autoremove -y; \
+fi
 
 # Start services
 /sbin/syslogd # Syslog daemon

@@ -4,11 +4,9 @@ data_dir=/data/simh-bin
 simh_dir=/opt/simh
 expected_file=$simh_dir/expected-emulators
 
-echo "Preparing simh..."
-cd $simh_dir
-
 buildsimh() {
-    echo "Building $1..."
+    cd $simh_dir
+    echo "Building simh $1..."
     if [[ ! -d $simh_dir/git ]]; then
         echo "Cloning repo..."
         git clone -q https://github.com/simh/simh.git git
@@ -21,9 +19,6 @@ buildsimh() {
 if [[ ! -d $data_dir ]]; then
     mkdir $data_dir
 fi
-
-echo "Copying disk images..."
-rsync -a --no-perms $SYNC_DIR/simh/ $simh_dir/
 
 while read -r emulator; do
   echo "Processing $emulator..."

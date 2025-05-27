@@ -43,4 +43,4 @@ mainmenu:
             original_date: "1980"
             version: "v88"
             version_date: "1983"
-            exec: ["/usr/games/frotz", "/data/zork/Zork1.dat"]
+            exec: ["/usr/games/frotz", "/opt/games/zork/Zork1.dat"]
