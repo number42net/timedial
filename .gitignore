@@ -1,5 +1,5 @@
 # Project specific
-data/
+files/ssh_host_keys
 NOTES.md
 deploy.sh
 

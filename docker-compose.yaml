@@ -6,7 +6,6 @@ services:
     container_name: timedial
     hostname: timedial
     environment:
-      SYNC_DIR: /mnt/sync
       DATA_DIR: /data
 
     ports:
@@ -16,9 +15,9 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: data
-        target: /mnt/sync
-        read_only: false
+        source: files/ssh_host_keys
+        target: /mnt/ssh_host_keys
+        read_only: true
       - timedial-data:/data
       - timedial-home:/home
 volumes:

@@ -21,9 +21,13 @@ if [[ ! -d $data_dir ]]; then
 fi
 
 while read -r emulator; do
-  echo "Processing $emulator..."
+  echo "Processing simh $emulator..."
   if [[ ! -x "$data_dir/$emulator" ]]; then
     buildsimh $emulator
   fi
   cp $data_dir/$emulator /usr/bin/ 
 done < "$expected_file"
+
+if [[ -d $simh_dir/git ]]; then
+  rm -rf $simh_dir/git
+fi

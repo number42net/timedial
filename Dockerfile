@@ -18,10 +18,13 @@ RUN apt-get -qq update && apt-get install -y \
 
 # Install simh
 RUN apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync
-COPY /files/simh /opt/simh
+COPY files/simh /opt/simh
+RUN find /opt/simh -name "*.gz" -exec gunzip {} \;
 
 # Install specific games, emulators, etc.
 # These are seperate to speed up container creation
+COPY files/games /opt/games
+RUN find /opt/games -name "*.gz" -exec gunzip {} \;
 RUN apt-get install -y frotz
 
 # Install Timedial
@@ -30,7 +33,8 @@ COPY pyproject.toml /timedial
 COPY timedial /timedial/timedial
 RUN ls -lha
 RUN cd /timedial; python3.11 -m pip -q install --upgrade pip && python3.11 -m pip -q install .
-COPY files/menu.yaml /
+RUN mkdir /opt/timedial
+COPY files/menu.yaml /opt/timedial
 
 # Configure telnet and SSH
 COPY files/telnet /etc/xinetd.d/telnet

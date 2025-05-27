@@ -16,6 +16,6 @@ AcceptEnv TERM
 AuthorizedKeysCommand /usr/local/bin/timedial_get_pub_keys
 AuthorizedKeysCommandUser guest
 
-HostKey /data/ssh_host_keys/ssh_host_rsa_key
-HostKey /data/ssh_host_keys/ssh_host_ecdsa_key
-HostKey /data/ssh_host_keys/ssh_host_ed25519_key
+HostKey /mnt/ssh_host_keys/ssh_host_rsa_key
+HostKey /mnt/ssh_host_keys/ssh_host_ecdsa_key
+HostKey /mnt/ssh_host_keys/ssh_host_ed25519_key

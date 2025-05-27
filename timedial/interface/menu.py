@@ -23,7 +23,7 @@ from typing import Self
 from pydantic import BaseModel, field_validator, model_validator
 from ruamel.yaml import YAML
 
-MENU_FILE = "/data/menu.yaml"
+MENU_FILE = "/opt/timedial/menu.yaml"
 
 yaml = YAML()
 

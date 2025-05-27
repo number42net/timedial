@@ -13,12 +13,8 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
   fi  
 done < /etc/passwd
 
-
-# Copy game data, diskimages, etc.
-echo "Copying disk images and game data..."
+# Build simh
 bash /opt/simh/build.sh
-mv /menu.yaml $DATA_DIR/menu.yaml
-rsync -a --no-perms $SYNC_DIR/simh $SYNC_DIR/games /opt/
 
 # Enforce permissions and remove unwanted packages
 chmod -R go-w /opt/
