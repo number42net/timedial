@@ -5,6 +5,10 @@ services:
     build: .
     container_name: timedial
     hostname: timedial
+    environment:
+      SYNC_DIR: /mnt/sync
+      DATA_DIR: /data
+
     ports:
       - "22:22"   # SSH
       - "23:23"   # Telnet
@@ -13,7 +17,7 @@ services:
     volumes:
       - type: bind
         source: data
-        target: /sync
+        target: /mnt/sync
         read_only: false
       - timedial-data:/data
       - timedial-home:/home

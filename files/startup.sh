@@ -1,25 +1,4 @@
 #!/bin/bash
-fixperms() {
-    echo "Fixing permissions..."
-    chown root:guest /data
-    chmod 0751 /data
-    chmod 0500 /data/ssh_host_keys
-    chmod 0400 /data/ssh_host_keys/*
-    chown -R root:guest /data/guests
-    chmod 0771 /data/guests
-    chmod 0640 /data/guests/*
-    chmod 0711 /home
-}
-
-# Init process
-if [ -d /init ]; then
-    echo "Starting init process..."
-    cp -R /init/* /data
-    fixperms
-    echo
-    echo "Finished init, remove /init bind mount and restart"
-    exit
-fi
 
 # Remove existing users
 while IFS=: read -r username _ uid _ _ _ home shell; do
@@ -34,8 +13,7 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
   fi  
 done < /etc/passwd
 
-fixperms # Run the fixperms function
-mv /menu.yaml /data/menu.yaml
+mv /menu.yaml $DATA_DIR/menu.yaml
 
 # Prepare simh
 bash /opt/simh/build.sh
@@ -44,6 +22,19 @@ bash /opt/simh/build.sh
 if [ "$TARGETARCH" = "amd64" ]; then \
       apt-get -qq remove -y gcc g++ make curl wget python3-pip git; apt-get -qq autoremove -y; \
 fi
+
+# Enforce permissions
+chown root:guest $DATA_DIR
+chmod 0751 $DATA_DIR
+chmod 0500 $DATA_DIR/ssh_host_keys
+chmod 0400 $DATA_DIR/ssh_host_keys/*
+chown -R root:guest $DATA_DIR/guests
+chmod 0771 $DATA_DIR/guests
+chmod 0640 $DATA_DIR/guests/*
+chmod 0711 /home
+chmod 0700 /mnt
+
+ls -lha /opt > /round3
 
 # Start services
 /sbin/syslogd # Syslog daemon

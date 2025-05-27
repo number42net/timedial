@@ -23,7 +23,7 @@ if [[ ! -d $data_dir ]]; then
 fi
 
 echo "Copying disk images..."
-rsync -a /sync/simh/ $simh_dir/
+rsync -a --no-perms $SYNC_DIR/simh/ $simh_dir/
 
 while read -r emulator; do
   echo "Processing $emulator..."
@@ -32,4 +32,3 @@ while read -r emulator; do
   fi
   cp $data_dir/$emulator /usr/bin/ 
 done < "$expected_file"
-

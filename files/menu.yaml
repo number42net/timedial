@@ -12,7 +12,7 @@ mainmenu:
             original_date: "1978"
             version: "2.11"
             version_date: "1992"
-            exec: ["/simh/run.sh", "pdp11-bsd211"]
+            exec: ["/opt/simh/run.sh", "pdp11-bsd211"]
     - id: "shells"
       name: "Shells"
       items:

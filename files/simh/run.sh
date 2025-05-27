@@ -2,7 +2,7 @@
 set -e
 
 if [ ! -d "~/$1" ]; then
-    cp -R /simh/$1 ~/
+    cp -R /opt/simh/$1 ~/
 fi
 
 cd ~/$1
