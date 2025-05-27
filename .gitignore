@@ -1,5 +1,6 @@
 # Project specific
 files/ssh_host_keys
+files/log
 NOTES.md
 deploy.sh
 

@@ -15,6 +15,10 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
+        source: files/log
+        target: /var/log
+
+      - type: bind
         source: files/ssh_host_keys
         target: /mnt/ssh_host_keys
         read_only: true
