@@ -22,8 +22,8 @@ from pathlib import Path
 from pydantic import BaseModel, field_validator
 from ruamel.yaml import YAML
 
+MENU_FILE = "/opt/timedial//menu.yaml"
 # MENU_FILE = "files/menu.yaml"
-MENU_FILE = "/opt/timedial/menu.yaml"
 
 yaml = YAML()
 
@@ -39,10 +39,10 @@ class Command(BaseModel):
         exec: List of strings representing the executable and arguments.
     """
 
-    publisher: str
-    original_date: str
-    version: str
-    version_date: str
+    publisher: str | None = None
+    original_date: str | None = None
+    version: str | None = None
+    version_date: str | None = None
     exec: list[str]
 
     @field_validator("exec")
@@ -71,6 +71,7 @@ class MenuItem(BaseModel):
     description: str | list[str]
     items: list["MenuItem"] | None = None
     command: Command | None = None
+    callable: str | None = None
 
 
 class MainMenu(BaseModel):

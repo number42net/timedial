@@ -17,11 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
-import crypt
 import getpass
 import os
 import pwd
 import time
+
+import bcrypt
 
 from timedial.accounts import account
 
@@ -97,9 +98,11 @@ def create_user() -> None:
             pubkeys.append(key)
 
     # Put it all together:
+    hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
     model = account.UserModel(
         username=username,
-        password_hash=crypt.crypt(password, crypt.mksalt(crypt.METHOD_SHA512)),
+        password_hash=hashed.decode("utf-8"),
         email=email,
         pubkeys=pubkeys,
         realname=realname,

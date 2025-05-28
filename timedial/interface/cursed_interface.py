@@ -3,7 +3,7 @@ import logging
 import os
 from typing import TypeVar
 
-from timedial.interface import cursed
+from timedial.interface import MENU_CALLABLES, cursed
 from timedial.interface.menu_data import MainMenu, MenuItem, load_menu
 
 logger = logging.getLogger(__name__)
@@ -71,9 +71,13 @@ class Menu:
             self.previous_menu_location = self.menu.selected_index
             self.display_menu(self.current_item)
             curses.doupdate()
-        elif key == 10:
-            logger.info("Test")
+        elif key == 10 and self.current_item.command:
             self.execute()
+        elif key == 10 and self.current_item.callable:
+            self.previous_menu = self.current_data
+            self.previous_menu_location = self.menu.selected_index
+            self.display_menu(MENU_CALLABLES[self.current_item.callable]())
+            curses.doupdate()
         elif key == 27 or key == curses.KEY_LEFT:
             self.display_menu(self.previous_menu, self.previous_menu_location)
         else:
@@ -94,12 +98,16 @@ class Menu:
             self.description._entries = list(self.current_item.description)
 
         if self.current_item.command:
-            self.description._entries += [
-                "",
-                f"Publisher: {self.current_item.command.publisher}",
-                f"Version: {self.current_item.command.version} ({self.current_item.command.version_date})",
-                f"First release: {self.current_item.command.original_date}",
-            ]
+            desc = []
+            if self.current_item.command.publisher:
+                desc.append(f"Publisher: {self.current_item.command.publisher}")
+            if self.current_item.command.version and self.current_item.command.version_date:
+                desc.append(f"Version: {self.current_item.command.version} ({self.current_item.command.version_date})")
+            elif self.current_item.command.version:
+                desc.append(f"Version: {self.current_item.command.version}")
+            elif self.current_item.command.original_date:
+                desc.append(f"First release: {self.current_item.command.original_date}")
+            self.description._entries += desc
 
         self.description.refresh()
 

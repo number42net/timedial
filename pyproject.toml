@@ -4,7 +4,12 @@ version = "0.0.1"
 description = "Your description here"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 
-dependencies = ["watchdog==6.0.0", "pydantic==2.11.5", "ruamel.yaml==0.18.11"]
+dependencies = [
+    "watchdog==6.0.0",
+    "pydantic==2.11.5",
+    "ruamel.yaml==0.18.11",
+    "bcrypt==4.3.0",
+]
 
 [project.scripts]
 timedial_create_user = "timedial.accounts.create_user:create_user"

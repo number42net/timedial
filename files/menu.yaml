@@ -36,9 +36,7 @@ mainmenu:
           version: "6.21.00"
           version_date: "2019"
           exec: ["/bin/tcsh"]
-
-  - id: "games"
-    name: "Games"
+  - name: "Games"
     description: "Fire up classic games from the golden era of text-based adventures and terminal crawlers."
     items:
       - name: "Zork I"
@@ -49,3 +47,7 @@ mainmenu:
           version: "v88"
           version_date: "1983"
           exec: ["/usr/games/frotz", "/opt/games/zork/Zork1.dat"]
+  - name: "Configuration"
+    description: "Update settings and account information"
+    command:
+      exec: ["/usr/bin/python3.11", "-m", "timedial.accounts.shell_update"]

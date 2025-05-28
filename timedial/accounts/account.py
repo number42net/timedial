@@ -25,6 +25,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
 GUEST_DIR = "/data/guests"
+# GUEST_DIR = "files/tmp"
 USERNAME_REGEX = re.compile(r"^[a-z0-9]+$")
 
 
@@ -46,10 +47,11 @@ class UserModel(BaseModel):
         frozen=True,
         title="Username",
         description="A unique, immutable username (lowercase letters and digits only).",
+        json_schema_extra={"menu_visible": False},
     )
     password_hash: str = Field(
         ...,
-        title="Password Hash",
+        title="Password",
         description="Hashed password string.",
     )
     email: str | None = Field(
