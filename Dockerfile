@@ -1,11 +1,15 @@
 FROM ubuntu:22.04
 
-# Generate man pages
-RUN echo "y" | unminimize
-
 # Update and install required packages for system
+# Generate man pages, locales, etc.
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get -qq update && apt-get install -y \
+RUN apt-get -qq update
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes
+RUN dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
+RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/doc/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
+RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/locale/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
+RUN if  [ "$(dpkg-divert --truename /usr/bin/man)" = "/usr/bin/man.REAL" ]; then rm -f /usr/bin/man; dpkg-divert --quiet --remove --rename /usr/bin/man; fi
+RUN apt-get install -y \
     openssh-server \
     xinetd \
     telnetd \
@@ -58,7 +62,6 @@ RUN mkdir /opt/timedial
 RUN find /usr/share/terminfo -type f,l | sed 's|.*/||' | sort > /opt/timedial/supported_terminals
 COPY pyproject.toml /timedial
 COPY timedial /timedial/timedial
-RUN ls -lha
 RUN cd /timedial; python3.11 -m pip -q install .
 COPY files/menu.yaml /opt/timedial
 
