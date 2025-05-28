@@ -1,5 +1,6 @@
 import curses
 import logging
+import os
 import textwrap
 from abc import ABC, abstractmethod
 
@@ -96,7 +97,7 @@ class Footer(Window):
     def _generate(self) -> None:
         # self._win.bkgd(" ", curses.A_REVERSE)
         self._win.erase()
-        self._win.addstr(0, 1, f"Terminal: {self._tsize_x}x{self._tsize_y}")
+        self._win.addstr(0, 1, f"Terminal: {os.getenv('TERM')} ({self._tsize_x}x{self._tsize_y})")
         text = "F1 for help"
         self._win.addstr(0, self._tsize_x - len(text) - 1, text)
         self._win.noutrefresh()

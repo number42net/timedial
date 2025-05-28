@@ -22,8 +22,7 @@ from pathlib import Path
 from pydantic import BaseModel, field_validator
 from ruamel.yaml import YAML
 
-MENU_FILE = "/opt/timedial//menu.yaml"
-# MENU_FILE = "files/menu.yaml"
+from timedial.config import config
 
 yaml = YAML()
 
@@ -89,10 +88,10 @@ def load_menu() -> MainMenu:
         ValueError: If required fields are missing or invalid in the YAML data.
     """
     try:
-        with open(MENU_FILE) as file:
+        with open(config.menu_file) as file:
             data = yaml.load(file)
     except FileNotFoundError as exc:
-        raise RuntimeError(f"Menu file not found: {MENU_FILE}") from exc
+        raise RuntimeError(f"Menu file not found: {config.menu_file}") from exc
     except KeyError as exc:
         raise ValueError("Missing 'mainmenu' key in YAML file.") from exc
     except Exception as exc:

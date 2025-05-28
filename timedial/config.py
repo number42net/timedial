@@ -22,13 +22,15 @@ import os
 from pydantic import BaseModel
 from ruamel.yaml import YAML
 
-CONFIG_FILE = "/data/config.yaml"
-
-yaml = YAML()
-
 
 class Config(BaseModel):
     _ephemeral: bool = not os.path.ismount("/home")
+    guest_dir: str = "/data/guests"
+    menu_file: str = "/opt/timedial/menu.yaml"
 
 
 config = Config()
+
+if os.getenv("TIMEDIAL_ENV", "") == "local":
+    config.guest_dir = "files/tmp"
+    config.menu_file = "files/menu.yaml"

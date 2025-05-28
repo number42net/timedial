@@ -24,8 +24,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
-GUEST_DIR = "/data/guests"
-# GUEST_DIR = "files/tmp"
+from timedial.config import config
+
 USERNAME_REGEX = re.compile(r"^[a-z0-9]+$")
 
 
@@ -83,7 +83,7 @@ class UserModel(BaseModel):
 
     def model_post_init(self, __context: Any) -> None:
         """Compute the path where the user's data is stored after model initialization."""
-        self._yaml_path = os.path.join(GUEST_DIR, f"{self.username}.json")
+        self._yaml_path = os.path.join(config.guest_dir, f"{self.username}.json")
 
     @field_validator("username")
     @classmethod
@@ -149,7 +149,7 @@ def read(username: str) -> UserModel:
     if not validate_username(username):
         raise ValueError("Invalid username")
 
-    with open(os.path.join(GUEST_DIR, f"{username}.json")) as f:
+    with open(os.path.join(config.guest_dir, f"{username}.json")) as f:
         json_data = f.read()
 
     return UserModel.model_validate_json(json_data)
@@ -165,7 +165,7 @@ def user_exists(username: str) -> bool:
         bool
 
     """
-    return os.path.isfile(os.path.join(GUEST_DIR, f"{username}.json"))
+    return os.path.isfile(os.path.join(config.guest_dir, f"{username}.json"))
 
 
 # account = UserModel(username="test", password_hash="hash")

@@ -28,7 +28,8 @@ from pathlib import Path
 from watchdog.events import DirCreatedEvent, FileCreatedEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-WATCH_DIR = "/data/guests/"
+from timedial.config import config
+
 USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+$")
 
 # Set up syslog logging
@@ -116,19 +117,19 @@ def create_user_daemon() -> None:
     JSON files on startup.
     """
     logger.info("GuestWatcher starting up.")
-    Path(WATCH_DIR).mkdir(parents=True, exist_ok=True)
+    Path(config.guest_dir).mkdir(parents=True, exist_ok=True)
 
     # Process existing files on startup
-    for entry in Path(WATCH_DIR).glob("*.json"):
+    for entry in Path(config.guest_dir).glob("*.json"):
         process_file(str(entry))
 
     # Set up watchdog observer
     event_handler = GuestFileHandler()
     observer = Observer()
-    observer.schedule(event_handler, WATCH_DIR, recursive=False)
+    observer.schedule(event_handler, config.guest_dir, recursive=False)
     observer.start()
 
-    logger.info(f"Monitoring {WATCH_DIR} for new guest files.")
+    logger.info(f"Monitoring {config.guest_dir} for new guest files.")
 
     try:
         observer.join()

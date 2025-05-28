@@ -66,6 +66,7 @@ def main() -> None:
     try:
         if not os.getenv("TERM"):
             set_terminal()
+        os.system("clear")
         cursed_interface.main()
     except KeyboardInterrupt:
         pass
