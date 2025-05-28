@@ -35,7 +35,8 @@ fi
 /sbin/syslogd # Syslog daemon
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
-socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon
+# socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon
+socat TCP-LISTEN:24,reuseaddr,fork EXEC:"script -q -c /bin/login /dev/null",pty,setsid,stderr,raw,echo=0,sane &
 timedial_create_user_daemon & # User creation daemon
 
 tail -F /var/log/messages # Show syslog

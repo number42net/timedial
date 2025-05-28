@@ -1,6 +1,6 @@
 """TimeDial project.
 
-Copyright (c) 2025 Martin Miedema
+Copyright (c) Martin Miedema
 Repository: https://github.com/number42net/timedial
 
 This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import re
 import time
 from typing import Any
 
-from pydantic import BaseModel, Field, PrivateAttr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
 GUEST_DIR = "/data/guests"
 USERNAME_REGEX = re.compile(r"^[a-z0-9]+$")
@@ -41,17 +41,47 @@ class UserModel(BaseModel):
 
     """
 
-    username: str = Field(frozen=True)
-    password_hash: str
-    email: str | None = None
-    pubkeys: list[str] = []
-    realname: str | None = None
-    lastlogin: float = time.time()
-    _path: str = PrivateAttr()
+    username: str = Field(
+        ...,
+        frozen=True,
+        title="Username",
+        description="A unique, immutable username (lowercase letters and digits only).",
+    )
+    password_hash: str = Field(
+        ...,
+        title="Password Hash",
+        description="Hashed password string.",
+    )
+    email: str | None = Field(
+        default=None,
+        title="Email Address",
+        description="Optional email address.",
+    )
+    pubkeys: list[str] = Field(
+        default_factory=list,
+        title="Public Keys",
+        description="Optional list of public keys.",
+    )
+    realname: str | None = Field(
+        default=None,
+        title="Real Name",
+        description="Optional real name of the user.",
+    )
+    lastlogin: float = Field(
+        default_factory=time.time,
+        title="Last Login Timestamp",
+        description="Timestamp of the user's last login (epoch seconds).",
+        json_schema_extra={"menu_visible": False},
+    )
+    _yaml_path: str = PrivateAttr()
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
 
     def model_post_init(self, __context: Any) -> None:
         """Compute the path where the user's data is stored after model initialization."""
-        self._path = os.path.join(GUEST_DIR, f"{self.username}.json")
+        self._yaml_path = os.path.join(GUEST_DIR, f"{self.username}.json")
 
     @field_validator("username")
     @classmethod
@@ -72,9 +102,13 @@ class UserModel(BaseModel):
             raise ValueError("Username must contain only lowercase letters and digits.")
         return value
 
+    def config_fields(self) -> dict[str, Any]:
+        """Return user-editable fields only (excluding system-managed fields)."""
+        return {name: field for name, field in UserModel.model_fields.items() if name not in {"lastlogin"}}
+
     def write(self) -> None:
         """Write the given UserModel to its corresponding JSON file."""
-        with open(self._path, "w") as f:
+        with open(self._yaml_path, "w") as f:
             f.write(self.model_dump_json(indent=4))
 
     def new_login(self) -> None:
@@ -130,3 +164,16 @@ def user_exists(username: str) -> bool:
 
     """
     return os.path.isfile(os.path.join(GUEST_DIR, f"{username}.json"))
+
+
+# account = UserModel(username="test", password_hash="hash")
+# print(account.model_dump_json(indent=4))
+
+
+# for name, field in UserModel.model_fields.items():
+#     extra = field.json_schema_extra
+#     if isinstance(extra, dict) and not extra.get("menu_visible", True):
+#         continue
+
+#     value = getattr(account, name)
+#     print(f"{name} = {value} ({field.title})")

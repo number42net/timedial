@@ -1,6 +1,6 @@
 """TimeDial project.
 
-Copyright (c) 2025 Martin Miedema
+Copyright (c) Martin Miedema
 Repository: https://github.com/number42net/timedial
 
 This program is free software: you can redistribute it and/or modify

@@ -1,5 +1,8 @@
 FROM ubuntu:22.04
 
+# Generate man pages
+RUN echo "y" | unminimize
+
 # Update and install required packages for system
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update && apt-get install -y \
@@ -15,6 +18,7 @@ RUN apt-get -qq update && apt-get install -y \
     socat \
     vim \
     && apt-get clean
+RUN python3.11 -m pip -q install --upgrade pip
 
 # Install simh
 RUN apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync
@@ -27,15 +31,6 @@ COPY files/games /opt/games
 RUN find /opt/games -name "*.gz" -exec gunzip {} \;
 RUN apt-get install -y frotz
 
-# Install Timedial
-RUN mkdir /timedial
-COPY pyproject.toml /timedial
-COPY timedial /timedial/timedial
-RUN ls -lha
-RUN cd /timedial; python3.11 -m pip -q install --upgrade pip && python3.11 -m pip -q install .
-RUN mkdir /opt/timedial
-COPY files/menu.yaml /opt/timedial
-
 # Configure telnet and SSH
 COPY files/telnet /etc/xinetd.d/telnet
 RUN echo '#!/bin/sh\ncat /etc/issue.net\nexec /usr/sbin/in.telnetd' > /usr/sbin/telnet-login
@@ -44,7 +39,6 @@ COPY files/issue.net /etc
 COPY files/sshd_config /etc/
 RUN rm /etc/legal
 COPY files/sshd_config /etc/ssh
-# RUN mkdir /var/run/sshd
 
 # Configure PAM and other security
 RUN sed -i '1i auth optional pam_faildelay.so delay=30000000' /etc/pam.d/login
@@ -57,6 +51,16 @@ COPY files/limits.conf /etc/security/limits.conf
 RUN useradd -ms "/usr/local/bin/timedial_create_user" -u 999 guest
 RUN echo "guest:guest" | chpasswd guest
 RUN groupadd guestusers
+
+# Install Timedial
+RUN mkdir /timedial
+RUN mkdir /opt/timedial
+RUN find /usr/share/terminfo -type f,l | sed 's|.*/||' | sort > /opt/timedial/supported_terminals
+COPY pyproject.toml /timedial
+COPY timedial /timedial/timedial
+RUN ls -lha
+RUN cd /timedial; python3.11 -m pip -q install .
+COPY files/menu.yaml /opt/timedial
 
 # Start-up
 COPY files/startup.sh /usr/sbin
