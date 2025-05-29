@@ -34,7 +34,7 @@ RUN find /opt/simh -name "*.gz" -exec gunzip {} \;
 COPY files/games /opt/games
 RUN find /opt/games -name "*.gz" -exec gunzip {} \;
 RUN apt-get install -y frotz
-
+RUN apt-get install -y bsdgames bsdgames-nonfree
 # Configure telnet and SSH
 COPY files/telnet /etc/xinetd.d/telnet
 RUN echo '#!/bin/sh\ncat /etc/issue.net\nexec /usr/sbin/in.telnetd' > /usr/sbin/telnet-login
