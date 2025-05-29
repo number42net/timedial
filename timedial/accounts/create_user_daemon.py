@@ -60,7 +60,7 @@ def process_file(path: str) -> None:
 
     try:
         logger.info(f"Creating user: {username}")
-        subprocess.run(["useradd", "-M", "-s", "/usr/local/bin/timedial_login", "-G", "guestusers", username], check=True)
+        subprocess.run(["useradd", "-M", "-s", "/usr/local/bin/timedial-login", "-G", "guestusers", username], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create user {username}: {e}")
 

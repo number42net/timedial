@@ -1,8 +1,8 @@
 [project]
 name = "timedial"
 version = "0.0.1"
-description = "Your description here"
-authors = [{ name = "Your Name", email = "you@example.com" }]
+description = "Go back in time using your Terminal"
+authors = [{ name = "Martin", email = "martin@timedial.org" }]
 
 dependencies = [
     "watchdog==6.0.0",
@@ -12,12 +12,13 @@ dependencies = [
 ]
 
 [project.scripts]
-timedial_create_user = "timedial.accounts.create_user:create_user"
-timedial_create_user_daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
-timedial_pam_module = "timedial.accounts.pam_module:pam_module"
-timedial_login = "timedial.login:main"
-timedial_get_pub_keys = "timedial.accounts.get_pub_keys:main"
-slow_proxy = "timedial.slowproxy:main"
+timedial-auth-create-user = "timedial.accounts.create_user:create_user"
+timedial-auth-create-user-daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
+timedial-auth-pam-module = "timedial.accounts.pam_module:pam_module"
+timedial-auth-get-pub-keys = "timedial.accounts.get_pub_keys:main"
+timedial-login = "timedial.login:main"
+timedial-slow-proxy = "timedial.other.slowproxy:main"
+timedial-start-sim = "timedial.other.start_sim:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

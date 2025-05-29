@@ -4,7 +4,7 @@ service telnet
     socket_type     = stream
     wait            = no
     user            = root
-    server          = /usr/sbin/telnet-login
+    server          = /usr/local/bin/timedial-auth-telnet-login
     log_on_success  += USERID
     log_on_failure  += USERID
     type            = UNLISTED

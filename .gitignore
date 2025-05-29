@@ -1,7 +1,6 @@
 # Project specific
-files/ssh_host_keys
-files/log
-files/tmp
+ssh_host_keys
+logs
 NOTES.md
 deploy.sh
 
@@ -44,7 +43,6 @@ lib/
 lib64/
 parts/
 sdist/
-var/
 wheels/
 share/python-wheels/
 *.egg-info/

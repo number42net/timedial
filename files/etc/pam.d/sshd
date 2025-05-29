@@ -2,7 +2,7 @@ auth optional pam_faildelay.so delay=30000000
 # PAM configuration for the Secure Shell service
 
 # Try guest users:
-auth    [success=done default=ignore] pam_exec.so quiet expose_authtok /usr/local/bin/timedial_pam_module
+auth    [success=done default=ignore] pam_exec.so quiet expose_authtok /usr/local/bin/timedial-auth-pam-module
 
 # Standard Un*x authentication.
 @include common-auth

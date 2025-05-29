@@ -13,7 +13,7 @@ mainmenu:
           original_date: "1978"
           version: "2.11"
           version_date: "1992"
-          exec: ["/opt/simh/run.sh", "pdp11-bsd211"]
+          exec: ["/usr/local/bin/timedial-start-sim", "pdp11-bsd211"]
       - name: "VAX 8600 with OpenVMS 7.1"
         description:
         - "Digital Equipment Corporation's powerful 1984 VAX 8600, running OpenVMS 7.1!"
@@ -23,7 +23,7 @@ mainmenu:
           original_date: "1978"
           version: "7.1"
           version_date: "1997"
-          exec: ["/opt/simh/run.sh", "vax8600-vms71"]
+          exec: ["/usr/local/bin/timedial-start-sim", "vax8600-vms71"]
   - name: "Shells"
     description: 
     - "Drop into a shell and hack (in the original sense) your TimeDial.org home directory."
