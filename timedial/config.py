@@ -17,16 +17,26 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
+# ruff: noqa: D102
+import logging
 import os
 
 from pydantic import BaseModel
-from ruamel.yaml import YAML
 
 
 class Config(BaseModel):
+    """Configuration model for the whole project."""
+
     _ephemeral: bool = not os.path.ismount("/home")
     guest_dir: str = "/data/guests"
     menu_file: str = "/opt/timedial/menu.yaml"
+    ui_logger_path_str: str = "~/.timedial.log"
+    ui_logger_level: int = logging.INFO
+    auth_logger_level: int = logging.INFO
+
+    @property
+    def ui_logger_path(self) -> str:
+        return os.path.expanduser(self.ui_logger_path_str)
 
 
 config = Config()
@@ -34,3 +44,6 @@ config = Config()
 if os.getenv("TIMEDIAL_ENV", "") == "local":
     config.guest_dir = "files/tmp"
     config.menu_file = "files/menu.yaml"
+    ui_logger_path_str = "files/log/timedial.log"
+    ui_logger_level: int = logging.DEBUG
+    auth_logger_level: int = logging.DEBUG

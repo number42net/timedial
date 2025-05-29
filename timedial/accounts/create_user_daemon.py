@@ -29,16 +29,12 @@ from watchdog.events import DirCreatedEvent, FileCreatedEvent, FileSystemEventHa
 from watchdog.observers import Observer
 
 from timedial.config import config
+from timedial.logger import auth_logger_config
 
 USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+$")
 
-# Set up syslog logging
-logger = logging.getLogger("GuestWatcher")
-logger.setLevel(logging.INFO)
-syslog_handler = logging.handlers.SysLogHandler(address="/dev/log")
-formatter = logging.Formatter("%(name)s: %(levelname)s - %(message)s")
-syslog_handler.setFormatter(formatter)
-logger.addHandler(syslog_handler)
+auth_logger_config()
+logger = logging.getLogger("timedial.crd")
 
 
 def process_file(path: str) -> None:

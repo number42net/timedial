@@ -21,13 +21,32 @@ import logging
 import logging.handlers
 import os
 
-logger = logging.getLogger("timedial")
-logger.setLevel(logging.DEBUG)
+from timedial.config import config
 
-# Only configure once
-if not getattr(logger, "_syslog_configured", False):
+
+def ui_logger_config() -> None:
+    ui_logger = logging.getLogger("timedial")
+    ui_logger.handlers.clear()
+    ui_logger.setLevel(config.ui_logger_level)
+    ui_logger.propagate = False
+
+    file_handler = logging.FileHandler(config.ui_logger_path)
+    formatter = logging.Formatter(
+        fmt="%(asctime)s - %(name)s: %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    file_handler.setFormatter(formatter)
+
+    ui_logger.addHandler(file_handler)
+
+
+def auth_logger_config() -> None:
+    auth_logger = logging.getLogger("timedial")
+    auth_logger.handlers.clear()
+    auth_logger.setLevel(config.auth_logger_level)
+    auth_logger.propagate = False
+
     syslog_path = "/dev/log" if os.path.exists("/dev/log") else "/var/run/syslog"
-
     syslog_handler = logging.handlers.SysLogHandler(
         address=syslog_path,
         facility=logging.handlers.SysLogHandler.LOG_AUTH,
@@ -35,23 +54,5 @@ if not getattr(logger, "_syslog_configured", False):
     formatter = logging.Formatter("%(name)s: %(levelname)s %(message)s")
     syslog_handler.setFormatter(formatter)
 
-    logger.addHandler(syslog_handler)
-    # We could use a custom logging class for this, but MyPy doesn't understand logging.setLoggerClass(CustomLogger) anyway
-    logger._syslog_configured = True  # type: ignore[attr-defined]
-    logger.propagate = False
-
-
-def get_logger(name: str) -> logging.Logger:
-    """Return a namespaced CustomLogger under the 'timedial' logger hierarchy.
-
-    Ensures the logger inherits from the configured 'timedial' base logger,
-    including syslog handler and formatting.
-
-    Args:
-        name (str): Sub-logger name (e.g., module or component name).
-
-    Returns:
-        CustomLogger: A logger instance named 'timedial.<name>'.
-
-    """
-    return logging.getLogger(f"timedial.{name}")
+    auth_logger.addHandler(syslog_handler)
+    auth_logger._syslog_configured = True  # type: ignore[attr-defined]

@@ -19,13 +19,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #!/usr/bin/env python3
 import crypt
+import logging
 import os
 import sys
 
 from timedial.accounts import account
-from timedial.logger import get_logger
+from timedial.logger import auth_logger_config
 
-logger = get_logger("pam")
+auth_logger_config()
+logger = logging.getLogger("timedial.pam")
 
 
 def pam_module() -> None:

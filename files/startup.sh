@@ -19,9 +19,14 @@ bash /opt/simh/build.sh
 # Allow w and who
 touch /var/run/utmp
 
+# Prepare logfile
+filename="/var/log/archive/messages-$(date '+%Y-%m-%d_%H-%M-%S').log"
+touch $filename
+ln -sf $filename /var/log/messages
+
 # Enforce permissions and remove unwanted packages
 chown -R root:root /var/log/*
-chmod -R 660 /var/log/*
+chmod -R ug=rw,ug+X,o= /var/log/*
 chmod -R go-w /opt/
 chown root:guest $DATA_DIR
 chmod 0751 $DATA_DIR
@@ -37,7 +42,7 @@ if [ "$TARGETARCH" = "amd64" ]; then \
 fi
 
 # Start services
-/sbin/syslogd # Syslog daemon
+/sbin/syslogd  -l 7 # Syslog daemon, no debug messages
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
 # socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon

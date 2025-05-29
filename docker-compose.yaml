@@ -14,8 +14,8 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: files/log/messages
-        target: /var/log/messages
+        source: files/log/archive
+        target: /var/log/archive
       - type: bind
         source: files/log/wtmp
         target: /var/log/wtmp

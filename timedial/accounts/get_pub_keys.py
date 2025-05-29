@@ -18,15 +18,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import argparse
-import os
-import pwd
-import stat
+import logging
 import sys
 
 from timedial.accounts import account
-from timedial.logger import get_logger
+from timedial.logger import auth_logger_config
 
-logger = get_logger("pam")
+auth_logger_config()
+logger = logging.getLogger("timedial.pubkeys")
 
 parser = argparse.ArgumentParser(description="Script that takes a username as a positional argument.")
 
@@ -59,24 +58,3 @@ def main() -> None:
 
     for key in user_account.pubkeys:
         print(key)
-
-
-# def fs(username: str) -> None:
-#     path = os.path.expanduser(f"~{username}/.ssh/authorized_keys")
-#     if not os.path.isfile(path):
-#         logger.error(f"No Authorized keys file exists for {username}")
-#         sys.exit(1)
-
-#     file_stat = os.stat(path)
-#     user = pwd.getpwnam(username)
-#     if not file_stat.st_uid == user.pw_uid:
-#         logger.error(f"{path} is not owned by {username}")
-#         sys.exit(1)
-
-#     if not stat.S_IMODE(file_stat.st_mode) == 0o644:
-#         logger.error(f"{path} has incorrect permissions")
-#         sys.exit(1)
-
-#     with open(path) as file:
-#         for line in file.readlines():
-#             print(line)

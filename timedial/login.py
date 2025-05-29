@@ -3,16 +3,9 @@ import os
 import subprocess
 
 from timedial.interface import cursed_interface
+from timedial.logger import ui_logger_config
 
-logging.basicConfig(level=logging.DEBUG)
-
-file_handler = logging.FileHandler("example.log")
-file_handler.setLevel(logging.DEBUG)
-
-logger = logging.getLogger()
-
-logger.handlers.clear()
-logger.addHandler(file_handler)
+ui_logger_config()
 
 
 def set_terminal() -> None:
