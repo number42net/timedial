@@ -1,8 +1,9 @@
 # Project specific
-ssh_host_keys
-logs
+ssh_host_keys/ssh_*
+logs/*
 NOTES.md
 deploy.sh
+ansible/ansible_log.txt
 
 # MacOS
 .DS_Store
