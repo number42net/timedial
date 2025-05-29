@@ -1,0 +1,61 @@
+- name: "Clone repo"
+  git:
+    repo: "https://github.com/number42net/timedial.git"
+    dest: "/opt/timedial"
+  register: gitrepo
+  tags: ["redeploy"]
+  
+- name: "Log directory"
+  ansible.builtin.file:
+    path: "/opt/timedial/logs"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Create wtmp log file"
+  ansible.builtin.shell: "touch /opt/timedial/logs/wtmp"
+  args:
+    creates: /opt/timedial/logs/wtmp
+
+- name: "SSH host key directory"
+  ansible.builtin.file:
+    path: "/opt/timedial/ssh_host_keys"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0500"
+
+- name: "Copy SSH host keys"
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/opt/timedial/ssh_host_keys"
+    owner: root
+    group: root
+    mode: '0400'
+  loop:
+    - files/ssh_host_ecdsa_key
+    - files/ssh_host_ecdsa_key.pub
+    - files/ssh_host_ed25519_key
+    - files/ssh_host_ed25519_key.pub
+    - files/ssh_host_rsa_key
+    - files/ssh_host_rsa_key.pub
+
+- name: Rebuild container
+  ansible.builtin.shell: docker compose up --detach --rebuild
+  args:
+    chdir: /opt/timedial
+  when: gitrepo.changed
+  tags: ["redeploy"]
+
+- name: Check if the container is already running
+  ansible.builtin.shell: docker compose ls | grep timedial | grep running
+  register: container_status
+  failed_when: false
+  changed_when: false
+
+- name: Start container
+  ansible.builtin.shell: /usr/bin/docker compose up -d
+  args:
+    chdir: /opt/timedial
+  when: container_status.rc != 0

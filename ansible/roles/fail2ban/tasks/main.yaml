@@ -1,0 +1,31 @@
+- name: Install fail2ban
+  apt:
+    name:
+      - fail2ban
+    state: present
+    update_cache: yes
+
+- name: Copy fail2ban configuration files
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - { src: 'files/jail.local', dest: '/etc/fail2ban/jail.local' }
+    - { src: 'files/action.d/iptables-multiport-docker.conf', dest: '/etc/fail2ban/action.d/iptables-multiport-docker.conf' }
+    - { src: 'files/filter.d/timedial.conf', dest: '/etc/fail2ban/filter.d/timedial.conf' }
+  register: configfiles
+
+- name: Ensure myapp service is enabled and running
+  ansible.builtin.systemd:
+    name: fail2ban
+    enabled: yes
+    state: started
+
+- name: Restart myapp
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: restarted
+  when: configfiles.changed

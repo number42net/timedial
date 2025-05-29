@@ -1,0 +1,6 @@
+- hosts: all
+  roles:
+    - docker
+    - timedial
+    - fail2ban
+    - pkg_upgrades

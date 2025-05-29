@@ -1,0 +1,37 @@
+- name: Run security upgrades only
+  ansible.builtin.command: unattended-upgrade -d
+
+- name: Remove hold on docker packages
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: install
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+  tags: ["never", "downtime"]
+
+- name: Upgrade docker packages
+  ansible.builtin.apt:
+    name: 
+      - docker-ce
+      - docker-ce-cli 
+      - containerd.io 
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
+  tags: ["never", "downtime"]
+
+- name: Restore hold on docker packages
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+  tags: ["never", "downtime"]
