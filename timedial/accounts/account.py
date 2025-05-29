@@ -166,16 +166,3 @@ def user_exists(username: str) -> bool:
 
     """
     return os.path.isfile(os.path.join(config.guest_dir, f"{username}.json"))
-
-
-# account = UserModel(username="test", password_hash="hash")
-# print(account.model_dump_json(indent=4))
-
-
-# for name, field in UserModel.model_fields.items():
-#     extra = field.json_schema_extra
-#     if isinstance(extra, dict) and not extra.get("menu_visible", True):
-#         continue
-
-#     value = getattr(account, name)
-#     print(f"{name} = {value} ({field.title})")
