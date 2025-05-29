@@ -37,6 +37,26 @@ args = parser.parse_args()
 
 
 def main() -> None:
+    """Main entry point for the TimeDial public key retrieval script.
+
+    This function retrieves and prints the public SSH keys associated with a
+    specified username. The username is expected as a positional command-line
+    argument. If the username is "guest", the script exits silently, as guest
+    accounts are not allowed to have public keys.
+
+    The function performs the following steps:
+    - Validates that a username has been provided.
+    - Checks whether the user exists in the system.
+    - Reads the user's account data from storage.
+    - Prints each of the user's public keys to standard output.
+
+    Logs errors and exits with status code 1 in the case of:
+    - Missing or invalid username
+    - User not found
+    - Failure during user account retrieval
+
+    This script is intended to be run from sshd.
+    """
     if not args.username:
         logger.error("No username received")
         sys.exit(1)

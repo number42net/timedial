@@ -1,3 +1,22 @@
+"""TimeDial project.
+
+Copyright (c) Martin Miedema
+Repository: https://github.com/number42net/timedial
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
+
 import logging
 import os
 import subprocess
@@ -6,9 +25,18 @@ from timedial.interface import cursed_interface
 from timedial.logger import ui_logger_config
 
 ui_logger_config()
+root_logger = logging.getLogger("timedial")
+logger = logging.getLogger("timedial.login")
 
 
 def set_terminal() -> None:
+    """Prompts the user to manually configure terminal type and dimensions.
+
+    Sets the TERM, LINES, and COLUMNS environment variables based on user input,
+    and attempts to apply the configuration using the `stty` command.
+
+    Logs and prints error messages if the configuration fails.
+    """
     with open("/opt/timedial/supported_terminals") as file:
         supported_terminals = [i.strip() for i in file.readlines()]
 
@@ -52,14 +80,42 @@ def set_terminal() -> None:
     os.environ["TERM"] = terminal
     os.environ["LINES"] = rows
     os.environ["COLUMNS"] = cols
-    subprocess.run(["stty", "rows", rows, "cols", cols], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        subprocess.run(
+            ["stty", "rows", rows, "cols", cols],
+            capture_output=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        msg = f"Failed to set terminal using stty: {exc}\nstdout: {exc.stdout.strip()}\nstderr: {exc.stderr.strip()}"
+        logger.error(msg)
+        print(msg)
+    except Exception as exc:
+        msg = f"Failed to set terminal using stty: {exc}"
+        logger.error(msg, exc_info=True)
+        print(msg)
 
 
 def main() -> None:
+    """Main entry point for TimeDial.
+
+    Checks and sets terminal environment variables if not already defined,
+    clears the screen, and launches the curses-based interface.
+
+    Handles keyboard interrupts and logs unexpected exceptions.
+    """
     try:
-        if not os.getenv("TERM"):
+        term = os.getenv("TERM")
+        if not term:
+            logger.warning("Logged in without $TERM")
             set_terminal()
+        else:
+            logger.info(f"Logged in with: {term}")
         os.system("clear")
         cursed_interface.main()
     except KeyboardInterrupt:
         pass
+    except Exception as exc:
+        msg = f"Uncaught exception: {exc}"
+        root_logger.error(msg, exc_info=True)
+        print(msg)

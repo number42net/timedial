@@ -1,3 +1,22 @@
+"""TimeDial project.
+
+Copyright (c) Martin Miedema
+Repository: https://github.com/number42net/timedial
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
+
 import curses
 import logging
 import os
@@ -35,7 +54,15 @@ T = TypeVar("T", bound=cursed.Window)
 
 
 class Menu:
+    """Handles the display and navigation of a menu system within a curses-based UI."""
+
     def __init__(self, menu_window: cursed.Menu, description_window: cursed.DescriptionBox) -> None:
+        """Initializes the Menu with given menu and description windows.
+
+        Args:
+            menu_window (cursed.Menu): The window displaying the menu entries.
+            description_window (cursed.DescriptionBox): The window displaying item descriptions.
+        """
         self.menu = menu_window
         self.description = description_window
         self.data = load_menu()
@@ -45,6 +72,12 @@ class Menu:
         self.display_menu(self.data)
 
     def display_menu(self, menu_data: MainMenu | MenuItem | None = None, location: int = 0) -> None:
+        """Displays the menu and populates it with entries.
+
+        Args:
+            menu_data (MainMenu | MenuItem | None): The menu data to display. Defaults to the main menu.
+            location (int): The index of the selected menu item. Defaults to 0.
+        """
         self.menu.clear_enties()
         if not menu_data:
             menu_data = self.data
@@ -63,6 +96,11 @@ class Menu:
         self.menu.refresh()
 
     def handle_key(self, key: int) -> None:
+        """Handles keyboard input for menu navigation and selection.
+
+        Args:
+            key (int): The key code input by the user.
+        """
         if key == curses.KEY_UP or key == curses.KEY_DOWN:
             self.menu_move(key)
             curses.doupdate()
@@ -85,6 +123,11 @@ class Menu:
             logger.debug(f"Unknown key: {key}")
 
     def menu_move(self, key: int) -> None:
+        """Moves the menu selection based on the key input.
+
+        Args:
+            key (int): The key code for moving selection (typically arrow keys).
+        """
         self.menu.handle_key(key)
         if not self.current_data.items:
             return
@@ -93,6 +136,7 @@ class Menu:
         self.update_description()
 
     def update_description(self) -> None:
+        """Updates the description box with information about the currently selected menu item."""
         if not isinstance(self.current_item.description, list):
             self.description._entries = [self.current_item.description, ""]
         else:
@@ -116,6 +160,7 @@ class Menu:
         self.description.refresh()
 
     def execute(self) -> None:
+        """Executes the command associated with the selected menu item, if any."""
         command = self.current_item.command
         if not command:
             logger.info(command)
@@ -134,7 +179,14 @@ class Menu:
 
 
 class CursedInterface:
+    """Main interface class for handling a full-screen curses-based UI."""
+
     def __init__(self, tdscr: curses.window) -> None:
+        """Initializes the curses interface and sets up initial windows.
+
+        Args:
+            tdscr (curses.window): The main terminal screen window.
+        """
         self._all_windows: list[cursed.Window] = []
         self._tdscr = tdscr
         try:
@@ -154,6 +206,7 @@ class CursedInterface:
         self.menu_interface()
 
     def welcome_screen(self) -> None:
+        """Displays the welcome/help screen with usage instructions."""
         window = self.add_window(cursed.TextBox, "Welcome")
         window._entries = help
         window.refresh()
@@ -162,6 +215,7 @@ class CursedInterface:
         self.remove_window(window)
 
     def menu_interface(self) -> None:
+        """Initializes and displays the main menu interface."""
         self.description_window = self.add_window(cursed.DescriptionBox, "Description")
         self.menu_window = self.add_window(cursed.Menu, "Main menu")
         self.menu_handler = Menu(self.menu_window, self.description_window)
@@ -171,6 +225,7 @@ class CursedInterface:
         self.handle_keys()
 
     def handle_keys(self) -> None:
+        """Continuously listens for and processes key inputs."""
         while True:
             key = self._tdscr.getch()
             if key == curses.KEY_RESIZE:
@@ -191,14 +246,29 @@ class CursedInterface:
                 self._active_window.handle_key(key)
 
     def add_window(self, windowclass: type[T], name: str) -> T:
+        """Adds and initializes a new window to the interface.
+
+        Args:
+            windowclass (type[T]): The class of the window to create.
+            name (str): The name identifier for the window.
+
+        Returns:
+            T: An instance of the created window.
+        """
         tmp = windowclass(self._tdscr, name)
         self._all_windows.append(tmp)
         return tmp
 
     def remove_window(self, window: cursed.Window) -> None:
+        """Removes and deletes a window from the interface.
+
+        Args:
+            window (cursed.Window): The window to remove.
+        """
         window.delete()
         self._all_windows.remove(window)
 
 
 def main() -> None:
+    """Entry point for launching the curses interface."""
     curses.wrapper(CursedInterface)

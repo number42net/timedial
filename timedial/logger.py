@@ -25,6 +25,11 @@ from timedial.config import config
 
 
 def ui_logger_config() -> None:
+    """Configures the UI logger.
+
+    Sets the log level, disables propagation, and adds a file handler
+    with timestamped formatting for UI-related logs.
+    """
     ui_logger = logging.getLogger("timedial")
     ui_logger.handlers.clear()
     ui_logger.setLevel(config.ui_logger_level)
@@ -41,6 +46,11 @@ def ui_logger_config() -> None:
 
 
 def auth_logger_config() -> None:
+    """Configures the authentication logger.
+
+    Sets the log level, disables propagation, and adds a syslog handler
+    using the appropriate system socket. This is intended for security-related logs.
+    """
     auth_logger = logging.getLogger("timedial")
     auth_logger.handlers.clear()
     auth_logger.setLevel(config.auth_logger_level)
@@ -51,7 +61,7 @@ def auth_logger_config() -> None:
         address=syslog_path,
         facility=logging.handlers.SysLogHandler.LOG_AUTH,
     )
-    formatter = logging.Formatter("%(name)s: %(levelname)s %(message)s")
+    formatter = logging.Formatter("%(name)s: %(message)s")
     syslog_handler.setFormatter(formatter)
 
     auth_logger.addHandler(syslog_handler)

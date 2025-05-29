@@ -66,6 +66,16 @@ class Command(BaseModel):
 
 
 class MenuItem(BaseModel):
+    """Represents a single item in the application menu.
+
+    Attributes:
+        name (str): The display name of the menu item.
+        description (str | list[str]): A description or list of descriptions for the menu item.
+        items (list[MenuItem] | None): Optional list of sub-menu items.
+        command (Command | None): Optional command to execute when this item is selected.
+        callable (str | None): Optional identifier for a callable function associated with the item.
+    """
+
     name: str
     description: str | list[str]
     items: list["MenuItem"] | None = None
@@ -74,6 +84,12 @@ class MenuItem(BaseModel):
 
 
 class MainMenu(BaseModel):
+    """Represents the root structure of the main application menu.
+
+    Attributes:
+        items (list[MenuItem]): List of top-level menu items.
+    """
+
     items: list[MenuItem]
 
 

@@ -34,6 +34,14 @@ args = parser.parse_args()
 
 
 def throttle_relay(src: socket.socket, dst: socket.socket, baud: int, direction: str) -> None:
+    """Relays data from one socket to another with throttling to simulate baud rate.
+
+    Args:
+        src (socket.socket): Source socket to read from.
+        dst (socket.socket): Destination socket to send to.
+        baud (int): Baud rate for throttling.
+        direction (str): String label for the direction of relay (e.g., 'TX' or 'RX').
+    """
     try:
         while True:
             data: bytes = src.recv(1)
@@ -51,6 +59,12 @@ def throttle_relay(src: socket.socket, dst: socket.socket, baud: int, direction:
 
 
 def handle_client(client_sock: socket.socket, args: argparse.Namespace) -> None:
+    """Handles a new client connection by creating a remote connection and relaying data.
+
+    Args:
+        client_sock (socket.socket): Client socket connected to the emulator.
+        args (argparse.Namespace): Parsed command-line arguments containing relay settings.
+    """
     try:
         remote_sock: socket.socket = socket.create_connection((args.host, args.rport))
         print(f"Connected to remote {args.host}:{args.rport}")
@@ -61,6 +75,11 @@ def handle_client(client_sock: socket.socket, args: argparse.Namespace) -> None:
 
 
 def start_tcp_server(args: argparse.Namespace) -> None:
+    """Starts a TCP server to listen for incoming client connections.
+
+    Args:
+        args (argparse.Namespace): Parsed command-line arguments including port and baud rate.
+    """
     server_sock: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_sock.bind(("127.0.0.1", args.lport))
@@ -77,6 +96,11 @@ def start_tcp_server(args: argparse.Namespace) -> None:
 
 
 def start_socket_server(args: argparse.Namespace) -> None:
+    """Starts a Unix domain socket server to emulate serial communication.
+
+    Args:
+        args (argparse.Namespace): Parsed command-line arguments including socket path and baud rate.
+    """
     path = args.socket
     if os.path.exists(path):
         os.remove(path)
@@ -96,6 +120,11 @@ def start_socket_server(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
+    """Main entry point for the serial emulator.
+
+    Starts TCP and optionally Unix socket servers based on arguments,
+    and runs indefinitely until interrupted.
+    """
     start_tcp_server(args)
     if args.socket:
         start_socket_server(args)

@@ -17,8 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from timedial.interface.config import Config
+from typing import Callable
 
-MENU_CALLABLES = {
-    "config_main": Config,
-}
+# from timedial.interface.config import Config
+
+MENU_CALLABLES: dict[str, Callable[[], None]] = {}
+#     "config_main": Config,
+# }

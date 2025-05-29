@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
-# ruff: noqa: D102
 import logging
 import os
 
@@ -25,7 +24,16 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    """Configuration model for the whole project."""
+    """Configuration model for the TimeDial project.
+
+    Attributes:
+        _ephemeral (bool): Indicates whether the /home directory is mounted (used to detect ephemeral environments).
+        guest_dir (str): Path to the directory, which stores the guest JSON data
+        menu_file (str): Path to the menu configuration YAML file.
+        ui_logger_path_str (str): String path to the UI log file (may include ~ for home directory).
+        ui_logger_level (int): Logging level for UI events.
+        auth_logger_level (int): Logging level for authentication events.
+    """
 
     _ephemeral: bool = not os.path.ismount("/home")
     guest_dir: str = "/data/guests"
@@ -36,6 +44,11 @@ class Config(BaseModel):
 
     @property
     def ui_logger_path(self) -> str:
+        """Returns the expanded file system path for the UI log file.
+
+        Returns:
+            str: Absolute path with '~' expanded to the user's home directory.
+        """
         return os.path.expanduser(self.ui_logger_path_str)
 
 
