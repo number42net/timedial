@@ -80,6 +80,7 @@ class Menu:
             curses.doupdate()
         elif key == 27 or key == curses.KEY_LEFT:
             self.display_menu(self.previous_menu, self.previous_menu_location)
+            curses.doupdate()
         else:
             logger.debug(f"Unknown key: {key}")
 
@@ -93,19 +94,22 @@ class Menu:
 
     def update_description(self) -> None:
         if not isinstance(self.current_item.description, list):
-            self.description._entries = [self.current_item.description]
+            self.description._entries = [self.current_item.description, ""]
         else:
-            self.description._entries = list(self.current_item.description)
+            # self.description._entries = list(self.current_item.description)
+            self.description._entries = (
+                [s for item in self.current_item.description[:-1] for s in (item, "")] + [self.current_item.description[-1]] + [""]
+            )
 
         if self.current_item.command:
             desc = []
             if self.current_item.command.publisher:
-                desc.append(f"Publisher: {self.current_item.command.publisher}")
+                desc.append(f"Original publisher: {self.current_item.command.publisher}")
             if self.current_item.command.version and self.current_item.command.version_date:
                 desc.append(f"Version: {self.current_item.command.version} ({self.current_item.command.version_date})")
             elif self.current_item.command.version:
                 desc.append(f"Version: {self.current_item.command.version}")
-            elif self.current_item.command.original_date:
+            if self.current_item.command.original_date:
                 desc.append(f"First release: {self.current_item.command.original_date}")
             self.description._entries += desc
 

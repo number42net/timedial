@@ -7,7 +7,6 @@ services:
     hostname: timedial
     environment:
       DATA_DIR: /data
-
     ports:
       - "22:22"   # SSH
       - "23:23"   # Telnet
@@ -15,9 +14,11 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: files/log
-        target: /var/log
-
+        source: files/log/messages
+        target: /var/log/messages
+      - type: bind
+        source: files/log/wtmp
+        target: /var/log/wtmp
       - type: bind
         source: files/ssh_host_keys
         target: /mnt/ssh_host_keys

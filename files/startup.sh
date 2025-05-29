@@ -16,7 +16,12 @@ done < /etc/passwd
 # Build simh
 bash /opt/simh/build.sh
 
+# Allow w and who
+touch /var/run/utmp
+
 # Enforce permissions and remove unwanted packages
+chown -R root:root /var/log/*
+chmod -R 660 /var/log/*
 chmod -R go-w /opt/
 chown root:guest $DATA_DIR
 chmod 0751 $DATA_DIR

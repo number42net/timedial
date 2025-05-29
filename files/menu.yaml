@@ -2,13 +2,11 @@ mainmenu:
   - name: "Simulators"
     description: 
       - "Experience authentic console access to vintage computers."
-      - ""
       - "The hardware is simulated, but the operating systems and software are 100% original!"
     items:
       - name: "PDP-11 with 2.11BSD"
         description:
         - "Digital Equipment Corporations' famous 1975 PDP-11/70, running 2.11BSD!"
-        - ""
         - "This mini-computer is fully decked out with 4MiB of memory"
         command:
           publisher: "BSD"
@@ -19,7 +17,6 @@ mainmenu:
       - name: "VAX 8600 with OpenVMS 7.1"
         description:
         - "Digital Equipment Corporation's powerful 1984 VAX 8600, running OpenVMS 7.1!"
-        - ""
         - "This 32-bit system features robust virtual memory support and an operating system unlike anything else"
         command:
           publisher: "DEC"
@@ -54,7 +51,6 @@ mainmenu:
         description: 
           - "The dungeon that started a genre."
           - "Descend into a deadly labyrinth where every move counts and death is permanent. With procedurally generated levels, mysterious potions, and brutal monsters, every run is a fresh challenge. Can you survive long enough to retrieve the Amulet of Yendor?" 
-          - ""
           - "Restored by rogueforge.net"
         command:
           publisher: "Michael Toy and Glenn Wichman"
@@ -64,7 +60,6 @@ mainmenu:
         description: 
           - "The legendary underground adventure that started it all."
           - "Explore the vast, mysterious Great Underground Empire in its raw, unfiltered form. Ancient treasures, cunning puzzles, and lurking dangers await in this massive original epic." 
-          - ""
           - "The original Zork was later split and refined into Zork I, II, and III. You can choose to experience the uncut original adventure, or dive into the enhanced trilogy."
         command:
           publisher: "Infocom"
