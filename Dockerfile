@@ -37,7 +37,7 @@ RUN apt-get install -y frotz
 RUN apt-get install -y bsdgames bsdgames-nonfree
 # Configure telnet and SSH
 COPY files/telnet /etc/xinetd.d/telnet
-RUN echo '#!/bin/sh\ncat /etc/issue.net\nexec /usr/sbin/in.telnetd' > /usr/sbin/telnet-login
+COPY files/telnet-login.sh /usr/sbin/telnet-login
 RUN chmod +x /usr/sbin/telnet-login
 COPY files/issue.net /etc
 COPY files/sshd_config /etc/
