@@ -19,9 +19,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import curses
 import logging
+import mailbox
 import os
+import time
 from typing import TypeVar
 
+from timedial.accounts import account
 from timedial.interface import MENU_CALLABLES, cursed
 from timedial.interface.menu_data import MainMenu, MenuItem, load_menu
 
@@ -187,6 +190,7 @@ class CursedInterface:
         Args:
             tdscr (curses.window): The main terminal screen window.
         """
+        self.account_data = account.read()
         self._all_windows: list[cursed.Window] = []
         self._tdscr = tdscr
         try:
@@ -200,6 +204,7 @@ class CursedInterface:
         self.header_window.refresh()
 
         self.footer_window = self.add_window(cursed.Footer, "footer")
+        self.footer_window.update(self.check_mail())
         self.footer_window.refresh()
 
         self.welcome_screen()
@@ -226,7 +231,12 @@ class CursedInterface:
 
     def handle_keys(self) -> None:
         """Continuously listens for and processes key inputs."""
+        last_status_update = time.time()
         while True:
+            if time.time() - last_status_update > 30:
+                self.footer_window.update(self.check_mail())
+                last_status_update = time.time()
+
             key = self._tdscr.getch()
             if key == curses.KEY_RESIZE:
                 self._tdscr.clear()
@@ -267,6 +277,31 @@ class CursedInterface:
         """
         window.delete()
         self._all_windows.remove(window)
+
+    def check_mail(self) -> int:
+        """Count the number of unread emails for the current user.
+
+        This method opens the user's mailbox located at /var/mail/{username}
+        and iterates through the messages. A message is considered unread
+        if the 'Status' header does not contain the letter 'R'.
+
+        Returns:
+            int: The number of unread email messages.
+
+        Raises:
+            None: Silently ignores FileNotFoundError if the mailbox file doesn't exist.
+        """
+        unread_counter = 0
+        try:
+            mbox = mailbox.mbox(f"/var/mail/{self.account_data.username}")
+            for message in mbox:
+                status = message.get("Status", "")
+                if "R" not in status:  # If 'R' is not present, it's unread
+                    unread_counter += 1
+        except FileNotFoundError:
+            pass
+
+        return unread_counter
 
 
 def main() -> None:

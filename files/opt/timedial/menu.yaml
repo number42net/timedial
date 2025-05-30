@@ -1,4 +1,24 @@
 mainmenu:
+  - name: "Shells"
+    description: 
+    - "Drop into a shell and hack (in the original sense) your TimeDial.org home directory."
+    items:
+      - name: "BASH (Bourne Again Shell)"
+        description: "GNU Bourne Again SHell: A widely-used, versatile command-line shell with scripting support."
+        command:
+          publisher: "GNU"
+          original_date: "1989"
+          version: "5.1.16"
+          version_date: "2020"
+          exec: ["/usr/bin/bash"]
+      - name: "TCSH (C Shell)"
+        description: "TENEX C Shell: An enhanced C shell with command-line editing and programmable completions."
+        command:  
+          publisher: "Bill Joy"
+          original_date: "1975"
+          version: "6.21.00"
+          version_date: "2019"
+          exec: ["/bin/tcsh"]
   - name: "Simulators"
     description: 
       - "Experience authentic console access to vintage computers."
@@ -24,26 +44,6 @@ mainmenu:
           version: "7.1"
           version_date: "1997"
           exec: ["/usr/local/bin/timedial-start-sim", "vax8600-vms71"]
-  - name: "Shells"
-    description: 
-    - "Drop into a shell and hack (in the original sense) your TimeDial.org home directory."
-    items:
-      - name: "BASH (Bourne Again Shell)"
-        description: "GNU Bourne Again SHell: A widely-used, versatile command-line shell with scripting support."
-        command:
-          publisher: "GNU"
-          original_date: "1989"
-          version: "5.1.16"
-          version_date: "2020"
-          exec: ["/usr/bin/bash"]
-      - name: "TCSH (C Shell)"
-        description: "TENEX C Shell: An enhanced C shell with command-line editing and programmable completions."
-        command:  
-          publisher: "Bill Joy"
-          original_date: "1975"
-          version: "6.21.00"
-          version_date: "2019"
-          exec: ["/bin/tcsh"]
   - name: "Games"
     description: "Fire up classic games from the golden era of text-based adventures and terminal crawlers."
     items:
@@ -97,7 +97,28 @@ mainmenu:
           version: "v17"
           version_date: "1982"
           exec: ["/usr/games/frotz", "/opt/games/zork/zork3.z3"]
-
+  - name: "Tools"
+    description:
+      - "Classic Unix tools for everyday tasks."
+    items:
+      - name: "Mail"
+        description:
+          - "The traditional Unix mail client."
+        command:
+          publisher: "Gnu"
+          version: Mailutils 3.14
+          original_date: "2007"
+          version_date: "2022"
+          exec: ["/usr/bin/mail"]
+      - name: "Lynx"
+        description:
+          - "A fast, text-based web browser."
+        command:
+          publisher: "Thomas Dickey"
+          original_date: "1992"
+          version: "2.9.0"
+          version_date: "2021"
+          exec: ["/usr/bin/lynx"]
 
   - name: "Configuration"
     description: "Update settings and account information"

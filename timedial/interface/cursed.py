@@ -134,6 +134,16 @@ class Header(Window):
 class Footer(Window):
     """Displays a footer / status bar at the bottom of the terminal screen."""
 
+    def __init__(self, tdscr: curses.window, name: str) -> None:
+        """Initializes the Footer window.
+
+        Args:
+            tdscr (curses.window): The main terminal screen.
+            name (str): The name of the window, displayed as the title.
+        """
+        self._unread = 0
+        super().__init__(tdscr, name)
+
     def _position(self) -> None:
         """Sets size and position of the footer window."""
         self._size_x = self._tsize_x
@@ -145,10 +155,33 @@ class Footer(Window):
         """Generates and renders the footer content."""
         # self._win.bkgd(" ", curses.A_REVERSE)
         self._win.erase()
-        self._win.addstr(0, 1, f"Terminal: {os.getenv('TERM')} ({self._tsize_x}x{self._tsize_y})")
+        message = [
+            f"Terminal: {os.getenv('TERM')} ({self._tsize_x}x{self._tsize_y})",
+            f"Unread mail: {self._unread}",
+        ]
+        logger.info(message)
+
+        self._win.addstr(0, 1, "    ".join(message))
         text = "F1 for help"
         self._win.addstr(0, self._tsize_x - len(text) - 1, text)
         self._win.noutrefresh()
+
+    def update(self, unread: int) -> None:
+        """Updates the unread count and refreshes the window if it has changed.
+
+        Args:
+            unread (int): The new unread count.
+
+        Returns:
+            None
+        """
+        if unread == self._unread:
+            return
+
+        self._unread = unread
+        self._generate()
+        # Really refresh, because this shouldn't happen frequently
+        self._win.refresh()
 
 
 class DescriptionBox(Window):

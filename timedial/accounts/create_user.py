@@ -20,13 +20,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 import getpass
 import os
 import pwd
+import smtplib
 import time
+from email.message import EmailMessage
 
 import bcrypt
 
 from timedial.accounts import account
 
 SSH = any(var in os.environ for var in ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"])
+
+WELCOME = (
+    "Welcome to TimeDial.org\n\n"
+    "You're now connected to a public service that offers access to classic computer "
+    "systems, retro games, shell environments, and a window into computing history. "
+    "Whether you're here to explore, learn, or just have fun - we're glad you're dialing in.\n\n"
+    "Please follow these guidelines:\n"
+    "+ Be respectful to others\n"
+    "+ Don't break stuff that isn't yours\n"
+    "+ Ask questions, share knowledge, enjoy the ride\n\n"
+    "This is a shared space - treat it like your favorite old machine: with curiosity and care.\n\n"
+    "Happy hacking!\n"
+)
 
 
 def create_user() -> None:
@@ -117,6 +132,14 @@ def create_user() -> None:
         except KeyError:
             print("Waiting for user to be created, this should only take a few seconds...")
             time.sleep(5)
+
+    msg = EmailMessage()
+    msg.set_content(WELCOME)
+    msg["Subject"] = "Welcome to timedial"
+    msg["From"] = "toor@timedial.org"
+    msg["To"] = username
+    with smtplib.SMTP("localhost") as server:
+        server.send_message(msg)
 
     print()
     print(f"Your new user is ready for use. You'll be logged out and can log back in with: {username}")

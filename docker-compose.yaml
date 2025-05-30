@@ -2,7 +2,7 @@ services:
   timedial:
     build: .
     container_name: timedial
-    hostname: timedial
+    hostname: timedial.org
     environment:
       DATA_DIR: /data
     ports:
@@ -23,6 +23,8 @@ services:
         read_only: true
       - timedial-data:/data
       - timedial-home:/home
+      - timedial-mail:/var/mail
 volumes:
   timedial-data:
   timedial-home:
+  timedial-mail:

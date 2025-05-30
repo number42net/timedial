@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import logging
-import os
 import re
 import subprocess
 import time
@@ -27,6 +26,7 @@ from pathlib import Path
 from watchdog.events import DirCreatedEvent, FileCreatedEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
+from timedial.accounts import account
 from timedial.config import config
 from timedial.logger import auth_logger_config
 
@@ -44,6 +44,7 @@ def process_file(path: str) -> None:
 
     """
     username = Path(path).stem
+    userdata = account.read(username)
 
     try:
         subprocess.run(
@@ -59,8 +60,39 @@ def process_file(path: str) -> None:
         pass
 
     try:
+        logger.info(f"Creating group: {username}")
+        subprocess.run(
+            [
+                "groupadd",
+                "-g",
+                str(userdata.id[1]),
+                username,
+            ],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to create user {username}: {e}")
+
+    try:
         logger.info(f"Creating user: {username}")
-        subprocess.run(["useradd", "-M", "-s", "/usr/local/bin/timedial-login", "-G", "guestusers", username], check=True)
+        subprocess.run(
+            [
+                "useradd",
+                "-m",
+                "-k",
+                "/etc/skel-guest",
+                "-s",
+                "/usr/local/bin/timedial-login",
+                "-u",
+                str(userdata.id[0]),
+                "-g",
+                str(userdata.id[1]),
+                "-G",
+                "guestusers",
+                username,
+            ],
+            check=True,
+        )
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create user {username}: {e}")
 
@@ -69,18 +101,6 @@ def process_file(path: str) -> None:
         subprocess.run(["chown", f"{username}:guest", path], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to set ownership for user file {username}: {e}")
-
-    try:
-        homedir = f"/home/{username}"
-        if not os.path.isdir(homedir):
-            logger.info(f"Creating home directory: {username}")
-            os.mkdir(homedir)
-
-        logger.info(f"Setting home directory permission : {username}")
-        os.chmod(homedir, 0o700)
-        subprocess.run(["chown", "-R", f"{username}:{username}", homedir], check=True)
-    except Exception as e:
-        logger.error(f"Failed to set permissions for user file {username}: {e}")
 
 
 class GuestFileHandler(FileSystemEventHandler):

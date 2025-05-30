@@ -5,9 +5,9 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
-RUN dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
-RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/doc/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
-RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/locale/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | DEBIAN_FRONTEND=noninteractive xargs apt-get install --reinstall -y
+RUN dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | xargs apt-get install --reinstall -y
+RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/doc/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
+RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/locale/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
 RUN if  [ "$(dpkg-divert --truename /usr/bin/man)" = "/usr/bin/man.REAL" ]; then rm -f /usr/bin/man; dpkg-divert --quiet --remove --rename /usr/bin/man; fi
 RUN apt-get install -y \
     openssh-server \
@@ -21,6 +21,10 @@ RUN apt-get install -y \
     python3-pip \
     socat \
     vim \
+    postfix \
+    mailutils \
+    man \
+    lynx \ 
     && apt-get clean
 RUN python3.11 -m pip -q install --upgrade pip
 
@@ -40,7 +44,8 @@ RUN sed -i '/pam_systemd.so/d' /etc/pam.d/common-session
 
 # Create users and groups
 # user guest is to create new accounts, guestusers group is for actual users
-RUN useradd -ms "/usr/local/bin/timedial-auth-create-user" -u 999 guest
+RUN groupadd -g 999 guest
+RUN useradd -ms "/usr/local/bin/timedial-auth-create-user" -u 999 -g guest guest
 RUN echo "guest:guest" | chpasswd guest
 RUN groupadd guestusers
 

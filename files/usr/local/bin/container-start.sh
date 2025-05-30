@@ -37,6 +37,7 @@ chmod 0700 /mnt
 
 echo "Starting services..."
 /sbin/syslogd  -l 7 # Syslog daemon, no debug messages
+newaliases; postfix start # Postfix mail server
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
 # socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon
