@@ -41,12 +41,19 @@
     - files/ssh_host_rsa_key
     - files/ssh_host_rsa_key.pub
 
-- name: Rebuild container
-  ansible.builtin.shell: docker compose up --detach --rebuild
+- name: Rebuild image
+  ansible.builtin.shell: docker build --no-cache .
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
-  tags: ["redeploy"]
+  tags: ["never", "redeploy"]
+
+- name: Rebuild container
+  ansible.builtin.shell: docker compose up --detach
+  args:
+    chdir: /opt/timedial
+  when: gitrepo.changed
+  tags: ["never", "redeploy"]
 
 - name: Check if the container is already running
   ansible.builtin.shell: docker compose ls | grep timedial | grep running

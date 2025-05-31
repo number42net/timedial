@@ -1,4 +1,5 @@
 # Project specific
+files/data
 ssh_host_keys/ssh_*
 logs/*
 NOTES.md

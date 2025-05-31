@@ -14,7 +14,7 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
 done < /etc/passwd
 
 echo "Buidling simh..."
-bash /opt/simh/build.sh
+bash /opt/simulators/build.sh
 
 echo "Preparing log files..."
 filename="/var/log/archive/messages-$(date '+%Y-%m-%d_%H-%M-%S').log"

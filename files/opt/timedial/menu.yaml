@@ -23,27 +23,7 @@ mainmenu:
     description: 
       - "Experience authentic console access to vintage computers."
       - "The hardware is simulated, but the operating systems and software are 100% original!"
-    items:
-      - name: "PDP-11 with 2.11BSD"
-        description:
-        - "Digital Equipment Corporations' famous 1975 PDP-11/70, running 2.11BSD!"
-        - "This mini-computer is fully decked out with 4MiB of memory"
-        command:
-          publisher: "BSD"
-          original_date: "1978"
-          version: "2.11"
-          version_date: "1992"
-          exec: ["/usr/local/bin/timedial-start-sim", "pdp11-bsd211"]
-      - name: "VAX 8600 with OpenVMS 7.1"
-        description:
-        - "Digital Equipment Corporation's powerful 1984 VAX 8600, running OpenVMS 7.1!"
-        - "This 32-bit system features robust virtual memory support and an operating system unlike anything else"
-        command:
-          publisher: "DEC"
-          original_date: "1978"
-          version: "7.1"
-          version_date: "1997"
-          exec: ["/usr/local/bin/timedial-start-sim", "vax8600-vms71"]
+    callable: simulators
   - name: "Games"
     description: "Fire up classic games from the golden era of text-based adventures and terminal crawlers."
     items:

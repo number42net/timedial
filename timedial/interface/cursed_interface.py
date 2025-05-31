@@ -300,6 +300,8 @@ class CursedInterface:
                     unread_counter += 1
         except FileNotFoundError:
             pass
+        except Exception as exc:
+            logger.exception(f"Failed to open mail: {exc}")
 
         return unread_counter
 

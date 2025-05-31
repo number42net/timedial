@@ -1,0 +1,18 @@
+[emulator] # Required
+label = "PDP-11 with 2.11BSD"
+command = "pdp11 pdp11.ini"
+
+[description] # Optional
+publisher = "BSD"
+original_date = "1978"
+version = "2.11"
+version_date = "1992"
+text = [
+    "Digital Equipment Corporations' famous 1975 PDP-11/70, running 2.11BSD!",
+    "This mini-computer is fully decked out with 4MiB of memory",
+]
+login_information = [
+    "Username: root / Password: None",
+    "At the boot prompt (:), press enter to boot.",
+    "At the single user prmot (#) press CTR+D to boot into multi-user mode.",
+]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 data_dir=/data/simh-bin
-simh_dir=/opt/simh
+simh_dir=/opt/simulators
 expected_file=$simh_dir/expected-emulators
 
 buildsimh() {

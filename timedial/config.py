@@ -24,23 +24,18 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    """Configuration model for the TimeDial project.
-
-    Attributes:
-        _ephemeral (bool): Indicates whether the /home directory is mounted (used to detect ephemeral environments).
-        guest_dir (str): Path to the directory, which stores the guest JSON data
-        menu_file (str): Path to the menu configuration YAML file.
-        ui_logger_path_str (str): String path to the UI log file (may include ~ for home directory).
-        ui_logger_level (int): Logging level for UI events.
-        auth_logger_level (int): Logging level for authentication events.
-    """
+    """Base configuration model for the TimeDial project."""
 
     _ephemeral: bool = not os.path.ismount("/home")
     guest_dir: str = "/data/guests"
     menu_file: str = "/opt/timedial/menu.yaml"
+    simulator_path: str = "/opt/simulators"
     ui_logger_path_str: str = "~/.timedial.log"
     ui_logger_level: int = logging.INFO
     auth_logger_level: int = logging.INFO
+    stale_files_size: int = 20 * 1024 * 1024  # 20MiB
+    stale_files_age: int = 24 * 3600  # 24 hours
+    stale_files_sleep: int = 60 * 60  # Once per hour
 
     @property
     def ui_logger_path(self) -> str:
@@ -55,8 +50,9 @@ class Config(BaseModel):
 config = Config()
 
 if os.getenv("TIMEDIAL_ENV", "") == "local":
-    config.guest_dir = "files/tmp"
-    config.menu_file = "files/menu.yaml"
-    ui_logger_path_str = "files/log/timedial.log"
-    ui_logger_level: int = logging.DEBUG
-    auth_logger_level: int = logging.DEBUG
+    config.guest_dir = "files/data/guests"
+    config.menu_file = "files/opt/timedial/menu.yaml"
+    # config.ui_logger_path_str = "files/log/timedial.log"
+    config.ui_logger_level = logging.DEBUG
+    config.auth_logger_level = logging.DEBUG
+    config.simulator_path = "files/opt/simulators"

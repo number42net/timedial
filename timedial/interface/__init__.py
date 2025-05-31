@@ -19,8 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Callable
 
-# from timedial.interface.config import Config
+from timedial.interface.menu_data import MainMenu
+from timedial.interface.simulators import load_simulators
 
-MENU_CALLABLES: dict[str, Callable[[], None]] = {}
-#     "config_main": Config,
-# }
+MENU_CALLABLES: dict[str, Callable[[], MainMenu]] = {
+    "simulators": load_simulators,
+}

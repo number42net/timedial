@@ -24,8 +24,55 @@ import shutil
 import sys
 from glob import glob
 
-SIMULATOR_DIR = "/opt/simh"
+import tomllib
+from pydantic import BaseModel
+
+SIMULATOR_DIR = "/opt/simulators"
 SIZE_LIMIT = 20 * 1024 * 1024  # 20 MB
+
+
+class Emulator(BaseModel):
+    """Represents the emulator configuration.
+
+    Attributes:
+        label (str): Label for the emulator.
+        command (str): Command to start the emulator.
+    """
+
+    label: str
+    command: str
+
+
+class Description(BaseModel):
+    """Optional metadata describing the system.
+
+    Attributes:
+        publisher (str | None): Publisher of the system.
+        original_date (str | None): Original release date of the system.
+        version (str | None): Version identifier.
+        version_date (str | None): Release date of the version.
+        text (List[str] | None): Descriptive text lines.
+        login_information (str | None): Login credentials or instructions.
+    """
+
+    publisher: str | None = None
+    original_date: str | None = None
+    version: str | None = None
+    version_date: str | None = None
+    text: list[str] | str = ""
+    login_information: list[str] | str | None = None
+
+
+class ConfigModel(BaseModel):
+    """Root model containing emulator and optional description.
+
+    Attributes:
+        emulator (Emulator): Emulator configuration block.
+        description (Description | None): Optional description block.
+    """
+
+    emulator: Emulator
+    description: Description = Description()
 
 
 def prepare(simulator: str) -> None:
@@ -46,7 +93,7 @@ def prepare(simulator: str) -> None:
         print(f"Simulator {simulator} does not exist!")
         sys.exit(1)
 
-    destination = os.path.expanduser(f"~/{simulator}")
+    destination = os.path.expanduser(f"~/simulators/{simulator}")
     destination_glob = glob(destination + "/**", recursive=True)
     gzipped_rel_paths = {os.path.relpath(f, destination)[:-3] for f in destination_glob if f.lower().endswith(".gz")}
 
@@ -105,7 +152,7 @@ def gzip_large_files(simulator: str) -> None:
     Args:
         simulator (str): The name of the simulator to process.
     """
-    destination = os.path.expanduser(f"~/{simulator}")
+    destination = os.path.expanduser(f"~/simulators/{simulator}")
     for file_path in glob(destination + "/**", recursive=True):
         if not os.path.isfile(file_path):
             continue
@@ -130,14 +177,17 @@ def run_simulator(simulator: str) -> None:
     Args:
         simulator (str): The name of the simulator to run.
     """
-    destination = os.path.expanduser(f"~/{simulator}")
-    login_info = os.path.join(destination, "login-info.txt")
-    if os.path.join(destination, "login-info.txt"):
-        with open(login_info) as file:
-            text = file.read()
+    destination = os.path.expanduser(f"~/simulators/{simulator}")
+
+    with open(os.path.join(destination, "simulator.toml"), "rb") as f:
+        data = ConfigModel(**tomllib.load(f))
 
     print()
-    print(text.strip())
+    if isinstance(data.description.login_information, list):
+        print("\n".join(data.description.login_information))
+    else:
+        print(data.description.login_information)
+    print("\nTo exit the simulator, press CTR+E")
     input("\nPress enter to start simulator...")
     print()
     os.system(f"cd {destination}; ./start")
@@ -153,8 +203,9 @@ def main() -> None:
     parser.add_argument("simulator", type=str, help="Name of the simulator")
 
     args = parser.parse_args()
-    print("Preparing simulator...")
+    print(f"Preparing {args.simulator}...")
     prepare(args.simulator)
+
     run_simulator(args.simulator)
     print()
     print("Compressing disk images to save space...")

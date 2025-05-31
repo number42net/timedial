@@ -45,6 +45,29 @@ def ui_logger_config() -> None:
     ui_logger.addHandler(file_handler)
 
 
+def daemon_logger_config() -> None:
+    """Configures the daemon logger.
+
+    Sets the log level, disables propagation, and adds a syslog handler
+    using the appropriate system socket. This is intended for security-related logs.
+    """
+    daemon_logger = logging.getLogger("timedial")
+    daemon_logger.handlers.clear()
+    daemon_logger.setLevel(config.auth_logger_level)
+    daemon_logger.propagate = False
+
+    syslog_path = "/dev/log" if os.path.exists("/dev/log") else "/var/run/syslog"
+    syslog_handler = logging.handlers.SysLogHandler(
+        address=syslog_path,
+        facility=logging.handlers.SysLogHandler.LOG_DAEMON,
+    )
+    formatter = logging.Formatter("%(name)s: %(message)s")
+    syslog_handler.setFormatter(formatter)
+
+    daemon_logger.addHandler(syslog_handler)
+    daemon_logger._syslog_configured = True  # type: ignore[attr-defined]
+
+
 def auth_logger_config() -> None:
     """Configures the authentication logger.
 
