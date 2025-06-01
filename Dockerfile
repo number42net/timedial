@@ -66,6 +66,7 @@ RUN cd /opt/timedial/src; python3.11 -m pip -q install .
 RUN chmod +x /usr/local/bin/*
 RUN chown root:guest /usr/local/bin/timedial-auth*
 RUN chmod 0554 /usr/local/bin/timedial-auth*
+RUN chmod -R a+r /opt/simulators
 
 # Start-up
 EXPOSE 22 23 24

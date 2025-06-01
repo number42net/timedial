@@ -1,0 +1,15 @@
+[emulator] # Required
+label = "Altair 8800 with BASIC 3.2"
+command = "altairz80 altairz80.ini"
+
+[description] # Optional
+publisher = "Microsoft"
+original_date = "1975"
+version = "3.2"
+version_date = "1975"
+text = ["MITS' groundbreaking 1975 Altair 8800, running Microsoft's BASIC 3.2!"]
+login_information = [
+    "MEMORY SIZE? [Press Enter]",
+    "TERMINAL WIDTH? [Press Enter]",
+    "WANT SIN? [Y]",
+]

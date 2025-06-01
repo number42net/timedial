@@ -33,6 +33,8 @@ Run real software on simulated vintage systems. Always wanted to try out BSD UNI
 
 Each simulator runs as a private instance, with disk images and configuration files stored in your personal home directory. That means full control - modify your setup, log in from multiple terminals, and pick up right where you left off.
 
+- **Altair 8800** with BASIC 3.2
+- **Data General Nova** with RDOS 7.5
 - **PDP-11/70** with 2.11BSD  
 - **VAX 8600** with OpenVMS 7.1  
 - Want something else? Let us know!

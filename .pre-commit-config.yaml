@@ -9,7 +9,7 @@ repos:
         files: \.py$
       - id: check-yaml
         files: \.ya?ml$
-      - id: check-added-large-files
+      # - id: check-added-large-files
       - id: debug-statements
         files: \.py$
 

@@ -1,0 +1,14 @@
+[emulator] # Required
+label = "Data General Nova with RDOS 7.5"
+command = "nova nova.ini"
+
+[description] # Optional
+publisher = "Data General"
+original_date = "1972"
+version = "7.5"
+version_date = "1986"
+text = ["Data General's classic Nova minicomputer, proudly running RDOS 7.5!"]
+login_information = [
+    "On 'Filename?' prompt, press enter to boot.",
+    "Enter date as: 01/07/2025",
+]
