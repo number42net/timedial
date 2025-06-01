@@ -9,3 +9,5 @@ else
 fi
 
 nginx -g "daemon off;"
+
+while true; do sleep 3600; done

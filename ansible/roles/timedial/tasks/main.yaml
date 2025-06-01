@@ -42,7 +42,7 @@
     - files/ssh_host_rsa_key.pub
 
 - name: Rebuild image
-  ansible.builtin.shell: docker build .
+  ansible.builtin.shell: docker compose build
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
