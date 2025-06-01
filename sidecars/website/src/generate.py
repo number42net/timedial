@@ -35,20 +35,21 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 def clean_up(html: str) -> str:
     """Clean-up the HTML with indendations and fix links."""
-    indent = 4
+    # indent = 4
     final = []
     for line in html.split("\n"):
-        new_line = line.replace('.md">', '.html">')
-        new_line = " " * indent + new_line
-        if new_line.strip()[:-2].endswith("</h"):
-            new_line = "\n" + new_line
+        line = line.replace('.md">', '.html">')
+        line = line.replace("<br />", "<br>")
+        # line = " " * indent + line
+        if line.strip()[:-2].endswith("</h"):
+            line = "\n" + line
 
-        if new_line.strip().startswith("<ul>"):
-            indent += 4
-        if new_line.strip().startswith("</ul>"):
-            indent -= 4
-            new_line = " " * indent + new_line.strip() + "\n"
-        final.append(new_line)
+        # if line.strip().startswith("<ul>"):
+        #     indent += 4
+        # if line.strip().startswith("</ul>"):
+        #     indent -= 4
+        #     line = " " * indent + line.strip() + "\n"
+        final.append(line)
 
     return "\n".join(final)
 
@@ -57,7 +58,7 @@ for md_file in CONTENT_DIR.glob("*.md"):
     try:
         with open(md_file, encoding="utf-8") as f:
             md_content = f.read()
-            html_content = markdown.markdown(md_content)
+            html_content = markdown.markdown(md_content, extensions=["fenced_code"])
 
         title = f"TimeDial {md_file.stem.capitalize()}"
         rendered_html = base_template.render(title=title, content=clean_up(html_content))

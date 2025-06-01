@@ -65,3 +65,6 @@ This is a shared space - treat it like your favorite old machine: with curiosity
 
 - Be respectful to others  
 - Don't break things that aren't yours
+
+## Source code
+All of the source code for TimeDial.org can be found on [GitHub](https://github.com/number42net/timedial)
