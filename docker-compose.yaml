@@ -17,13 +17,7 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-    entrypoint: >
-      sh -c "
-      certbot certonly --webroot -w /var/lib/letsencrypt \
-        --email toor@timedia.org --agree-tos --no-eff-email \
-        -d timedial.org &&
-      cp -L /etc/letsencrypt/live/timedial.org/fullchain.pem /etc/letsencrypt/live/timedial.org/privkey.pem
-      "
+    entrypoint: sh -c "certbot certonly --non-interactive --webroot -w /var/lib/letsencrypt --email toor@timedia.org --agree-tos --no-eff-email -d timedial.org && cp -L /etc/letsencrypt/live/timedial.org/fullchain.pem /etc/letsencrypt/live/timedial.org/privkey.pem"
   timedial:
     build: .
     container_name: timedial

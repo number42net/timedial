@@ -3,13 +3,12 @@ FROM ubuntu:22.04
 # Update and install required packages for system
 # Generate man pages, locales, etc.
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get -qq update
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
-RUN dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | xargs apt-get install --reinstall -y
-RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/doc/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
-RUN dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/locale/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
+RUN apt-get -qq update && dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | xargs apt-get install --reinstall -y
+RUN apt-get -qq update && dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/doc/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
+RUN apt-get -qq update && dpkg --verify --verify-format rpm | awk '$2 ~ /\/usr\/share\/locale/ {print $2}' | sed 's|/[^/]*$||' | sort | uniq | xargs dpkg -S | sed 's|, |\n|g;s|: [^:]*$||' | uniq | xargs apt-get install --reinstall -y
 RUN if  [ "$(dpkg-divert --truename /usr/bin/man)" = "/usr/bin/man.REAL" ]; then rm -f /usr/bin/man; dpkg-divert --quiet --remove --rename /usr/bin/man; fi
-RUN apt-get install -y \
+RUN apt-get -qq update && apt-get install -y \
     openssh-server \
     xinetd \
     telnetd \
@@ -29,11 +28,11 @@ RUN apt-get install -y \
 RUN python3.11 -m pip -q install --upgrade pip
 
 # Install simh dependencies
-RUN apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync libsdl2-ttf-dev curl
+RUN apt-get -qq update && apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync libsdl2-ttf-dev curl
 
 # Install games
-RUN apt-get install -y frotz
-RUN apt-get install -y bsdgames bsdgames-nonfree
+RUN apt-get -qq update && apt-get install -y frotz
+RUN apt-get -qq update && apt-get install -y bsdgames bsdgames-nonfree
 
 # Remove legal message on first login
 RUN rm /etc/legal

@@ -42,14 +42,14 @@
     - files/ssh_host_rsa_key.pub
 
 - name: Rebuild image
-  ansible.builtin.shell: docker build --no-cache .
+  ansible.builtin.shell: docker build .
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
   tags: ["never", "redeploy"]
 
 - name: Rebuild container
-  ansible.builtin.shell: docker compose up --profile production --detach
+  ansible.builtin.shell: COMPOSE_PROFILES=production docker compose up --detach
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
@@ -62,7 +62,7 @@
   changed_when: false
 
 - name: Start container
-  ansible.builtin.shell: /usr/bin/docker compose up --profile production -d
+  ansible.builtin.shell: COMPOSE_PROFILES=production /usr/bin/docker compose up -d
   args:
     chdir: /opt/timedial
   when: container_status.rc != 0
