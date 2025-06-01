@@ -9,6 +9,7 @@ dependencies = [
     "pydantic==2.11.5",
     "ruamel.yaml==0.18.11",
     "bcrypt==4.3.0",
+    "requests==2.32.3",
 ]
 
 [project.scripts]
@@ -31,6 +32,7 @@ dev = [
     "mypy==1.15.0",
     "Markdown==3.8",
     "types-Markdown==3.8.0.20250415",
+    "types-requests==2.32.0.20250515",
 ]
 ansible = ["ansible-core==2.18.6"]
 
