@@ -29,7 +29,7 @@ RUN apt-get install -y \
 RUN python3.11 -m pip -q install --upgrade pip
 
 # Install simh dependencies
-RUN apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync
+RUN apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync libsdl2-ttf-dev curl
 
 # Install games
 RUN apt-get install -y frotz

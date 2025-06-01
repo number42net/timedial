@@ -1,0 +1,67 @@
+# Welcome to TimeDial.org
+
+**TimeDial.org** is a public [BBS](https://en.wikipedia.org/wiki/Bulletin_board_system)-style system that you can access through a browser (coming soon), SSH, Telnet, or a raw TCP socket.
+
+Whether you're logging in with a modern terminal or a real vintage setup, TimeDial lets you explore a shell environment, play classic games, and even run authentic vintage software on simulated machines like the PDP-11 and VAX.
+
+TimeDial is built with true vintage compatibility in mind. The interface dynamically adapts to both 40- and 80-column displays, meaning it works just as well on a real terminal as on a modern terminal emulator. It's also optimized for slow connections and remains usable even at 1200 baud.
+
+## How to Connect
+
+Connect using any of the following ports with the username `guest` and the password `guest`. The system will guide you through creating a new account. Once that's done, simply log in again using your personal username and password.
+
+- **22 - SSH** (recommended; use with [PuTTY](https://www.putty.org/) or similar)
+- **23 - Telnet**
+- **24 - Raw TCP** (least ideal, but useful for serial-to-TCP bridges or vintage terminals)
+
+**Privacy Note:** While passwords are encrypted on the server, Telnet and raw TCP connections transmit credentials in plain text. Don't store anything important on the server and use a unique password you don't use elsewhere.
+
+## What You'll Find Inside
+
+The platform is still in its early stages, but already offers:
+
+### Classic Simulated Hardware
+
+Run real software on simulated vintage systems. Always wanted to try out BSD UNIX but don't have a PDP-11 lying around? Now's your chance!
+
+Each simulator runs as a private instance, with disk images and configuration files stored in your personal home directory. That means full control - modify your setup, log in from multiple terminals, and pick up right where you left off.
+
+- **PDP-11/70** with 2.11BSD  
+- **VAX 8600** with OpenVMS 7.1  
+- Want something else? Let us know!
+
+[More information about the simulators](simulators.md)
+
+### Interactive Shells: Bash and C-Shell
+
+Access your own home directory, manage files, create scripts - the power of Unix is at your fingertips.
+
+Currently available shells:
+
+- **Bash**
+- **C Shell (csh)**
+- More on the way - request your favorite!
+
+### Classic Games
+
+Step into the world of early interactive entertainment with text-based adventures and dungeon crawlers that helped define entire genres.
+
+- **Rogue** - The dungeon crawler that started it all.  
+- **Zork (Original Epic)** - The complete, uncut version from the late 1970s.  
+- **Zork I: The Great Underground Empire (1980)** - Begin your quest for fame and fortune.  
+- **Zork II: The Wizard of Frobozz (1981)** - Face the cunning wizard and descend deeper.  
+- **Zork III: The Dungeon Master (1982)** - Confront fate and face your ultimate test.
+
+### Tools
+
+Communicate with others or explore the web - all from the command line.
+
+- **Mail** - Traditional Unix mail client (limited to internal messaging)  
+- **Lynx** - A text-based web browser that lets you explore the modern web from a vintage terminal
+
+## Rules
+
+This is a shared space - treat it like your favorite old machine: with curiosity and care!
+
+- Be respectful to others  
+- Don't break things that aren't yours

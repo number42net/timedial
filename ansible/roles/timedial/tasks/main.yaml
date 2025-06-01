@@ -49,7 +49,7 @@
   tags: ["never", "redeploy"]
 
 - name: Rebuild container
-  ansible.builtin.shell: docker compose up --detach
+  ansible.builtin.shell: docker compose up --profile production --detach
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
@@ -62,7 +62,7 @@
   changed_when: false
 
 - name: Start container
-  ansible.builtin.shell: /usr/bin/docker compose up -d
+  ansible.builtin.shell: /usr/bin/docker compose up --profile production -d
   args:
     chdir: /opt/timedial
   when: container_status.rc != 0
