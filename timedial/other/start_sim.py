@@ -89,43 +89,44 @@ def prepare(simulator: str) -> None:
         SystemExit: If the specified simulator directory does not exist.
     """
     source = os.path.join(SIMULATOR_DIR, simulator)
-    if not os.path.isdir(source):
-        print(f"Simulator {simulator} does not exist!")
-        sys.exit(1)
-
     destination = os.path.expanduser(f"~/simulators/{simulator}")
     destination_glob = glob(destination + "/**", recursive=True)
     gzipped_rel_paths = {os.path.relpath(f, destination)[:-3] for f in destination_glob if f.lower().endswith(".gz")}
 
-    # Copy the files from the simulator source.
-    for s_path in glob(source + "/**", recursive=True):
-        d_path = os.path.join(destination, os.path.relpath(s_path, source))
-        if os.path.isfile(d_path):
-            # If the file already exists
-            continue
-        if os.path.isdir(s_path):
-            continue
-        if os.path.relpath(s_path, source) in gzipped_rel_paths:
-            # If a gzipped version of the file exists
-            continue
-        if s_path.lower().endswith(".gz") and os.path.isfile(d_path[:-3]):
-            # If a gunzipped version of the file exists
-            continue
-        if s_path.lower().endswith(".gz"):
+    if not os.path.isdir(source) and not os.path.isdir(destination):
+        print(f"Simulator {simulator} does not exist!")
+        sys.exit(1)
+
+    if os.path.isdir(source):
+        # Copy the files from the simulator source.
+        for s_path in glob(source + "/**", recursive=True):
+            d_path = os.path.join(destination, os.path.relpath(s_path, source))
+            if os.path.isfile(d_path):
+                # If the file already exists
+                continue
+            if os.path.isdir(s_path):
+                continue
+            if os.path.relpath(s_path, source) in gzipped_rel_paths:
+                # If a gzipped version of the file exists
+                continue
+            if s_path.lower().endswith(".gz") and os.path.isfile(d_path[:-3]):
+                # If a gunzipped version of the file exists
+                continue
+            if s_path.lower().endswith(".gz"):
+                try:
+                    os.makedirs(os.path.dirname(d_path), exist_ok=True)
+                    with gzip.open(s_path, "rb") as f_in, open(d_path[:-3], "wb") as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                    continue
+                except Exception as exc:
+                    print(f"Warning: Failed to decompress: {s_path} - {exc}")
+                    continue
+
             try:
                 os.makedirs(os.path.dirname(d_path), exist_ok=True)
-                with gzip.open(s_path, "rb") as f_in, open(d_path[:-3], "wb") as f_out:
-                    shutil.copyfileobj(f_in, f_out)
-                continue
+                shutil.copy2(s_path, d_path)
             except Exception as exc:
-                print(f"Warning: Failed to decompress: {s_path} - {exc}")
-                continue
-
-        try:
-            os.makedirs(os.path.dirname(d_path), exist_ok=True)
-            shutil.copy2(s_path, d_path)
-        except Exception as exc:
-            print(f"Warning: Failed to copy: {s_path} - {exc}")
+                print(f"Warning: Failed to copy: {s_path} - {exc}")
 
     # Uncompress any remaining files in the destination
     for gz_path in glob(destination + "/**", recursive=True):
@@ -190,7 +191,7 @@ def run_simulator(simulator: str) -> None:
     print("\nTo exit the simulator, press CTR+E")
     input("\nPress enter to start simulator...")
     print()
-    os.system(f"cd {destination}; ./start")
+    os.system(f"cd {destination}; {data.emulator.command}")
 
 
 def main() -> None:

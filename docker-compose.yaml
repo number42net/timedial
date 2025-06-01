@@ -1,5 +1,6 @@
 services:
   website:
+    profiles: [production]
     container_name: timedial-website
     build: sidecars/website
     ports:
@@ -7,6 +8,14 @@ services:
       - "443:443"
     volumes:
       - certbot-etc:/etc/letsencrypt
+  simh:
+    container_name: timedial-simhbuilder
+    build: sidecars/simh-builder
+    environment:
+      COMMIT: "f3c61c315a83ace8f2676bdc878962bf4528b5a6"
+    volumes:
+      - simh-bin:/opt/simh/bin
+      - simh-src:/opt/simh/src
   timedial:
     build: .
     container_name: timedial
@@ -32,9 +41,12 @@ services:
       - timedial-data:/data
       - timedial-home:/home
       - timedial-mail:/var/mail
+      - simh-bin:/opt/simh-bin:ro
+        
 volumes:
   timedial-data:
   timedial-home:
   timedial-mail:
   certbot-etc:
-  
+  simh-bin:
+  simh-src:

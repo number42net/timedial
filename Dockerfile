@@ -2,7 +2,9 @@ FROM ubuntu:22.04
 
 # Update and install required packages for system
 # Generate man pages, locales, etc.
-COPY files/etc/apt/sources.list /etc/apt/sources.list
+COPY files/etc/apt /etc/apt
+RUN echo $(uname -m); cp /etc/apt/sources_$(uname -m).list /etc/apt/sources.list
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 RUN apt-get -qq update && dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | xargs apt-get install --reinstall -y
@@ -28,8 +30,8 @@ RUN apt-get -qq update && apt-get install -y \
     && apt-get clean
 RUN python3.11 -m pip -q install --upgrade pip
 
-# Install simh dependencies
-RUN apt-get -qq update && apt-get -qq install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev git expect rsync libsdl2-ttf-dev curl
+# Simh requirements
+RUN apt-get -qq update && apt-get install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev expect rsync libsdl2-ttf-dev curl
 
 # Install games
 RUN apt-get -qq update && apt-get install -y frotz

@@ -51,9 +51,9 @@ def load_simulators() -> MainMenu:
     global_sims = os.listdir(config.simulator_path)
     if os.path.isdir(home_dir):
         local_sims = os.listdir(home_dir)
-        logger.info(local_sims)
+        logger.debug(local_sims)
     else:
-        logger.info("No local sims...")
+        logger.debug("No local sims...")
         local_sims = []
 
     global_sims.sort()
@@ -61,9 +61,9 @@ def load_simulators() -> MainMenu:
 
     all_sims = {sim: os.path.join(config.simulator_path, sim) for sim in global_sims}
 
-    logger.info(all_sims)
+    logger.debug(all_sims)
     all_sims.update({sim: os.path.join(home_dir, sim) for sim in local_sims})
-    logger.info(all_sims)
+    logger.debug(all_sims)
 
     for name, path in all_sims.items():
         config_file = os.path.join(path, "simulator.toml")
@@ -94,6 +94,7 @@ def load_simulators() -> MainMenu:
                 ),
             )
         )
+        logger.debug(simulators[-1])
 
     return MainMenu(items=sorted(simulators, key=lambda x: x.name))
 
