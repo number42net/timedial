@@ -5,7 +5,7 @@ logs/*
 NOTES.md
 deploy.sh
 ansible/ansible_log.txt
-
+/sidecars/website/html/*.html
 # MacOS
 .DS_Store
 .AppleDouble
