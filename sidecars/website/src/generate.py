@@ -35,36 +35,36 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 def clean_up(html: str) -> str:
     """Clean-up the HTML with indendations and fix links."""
-    # indent = 4
     final = []
     for line in html.split("\n"):
         line = line.replace('.md">', '.html">')
         line = line.replace("<br />", "<br>")
-        # line = " " * indent + line
         if line.strip()[:-2].endswith("</h"):
             line = "\n" + line
-
-        # if line.strip().startswith("<ul>"):
-        #     indent += 4
-        # if line.strip().startswith("</ul>"):
-        #     indent -= 4
-        #     line = " " * indent + line.strip() + "\n"
         final.append(line)
 
     return "\n".join(final)
 
 
 for md_file in CONTENT_DIR.glob("*.md"):
+    print(f"Processing: {md_file}")
     try:
         with open(md_file, encoding="utf-8") as f:
             md_content = f.read()
-            html_content = markdown.markdown(md_content, extensions=["fenced_code"])
+
+        for number, line in enumerate(md_content.split("\n")):
+            if not line.isascii():
+                result = [(i, c) for i, c in enumerate(line) if ord(c) >= 128]
+                print(f"Found non-ascii character on line: {number + 1} col: {result[0][0] + 1}: {result[0][1]}")
+                exit(1)
+
+        html_content = markdown.markdown(md_content, extensions=["fenced_code"])
 
         title = f"TimeDial {md_file.stem.capitalize()}"
         rendered_html = base_template.render(title=title, content=clean_up(html_content))
 
         output_path = OUTPUT_DIR / f"{md_file.stem}.html"
-        with open(output_path, "w", encoding="utf-8") as f:
+        with open(output_path, "w", encoding="ascii") as f:
             f.writelines(rendered_html)
 
         print(f"Generated: {output_path}")

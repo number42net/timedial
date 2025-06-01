@@ -2,7 +2,7 @@
 
 Our simulators are based on the publicly available [SIMH](https://github.com/simh/simh) codebase.
 
-A variety of simulators are available. When you open one, all relevant files are copied to your home directory under `~/simulators` before the simulator is started. This means each simulator is personal to you—you’re free to modify anything, including the `simh.ini` files.
+A variety of simulators are available. When you open one, all relevant files are copied to your home directory under `~/simulators` before the simulator is started. This means each simulator is personal to you-you're free to modify anything, including the `simh.ini` files.
 
 ## Creating or Copying Simulators
 
@@ -40,7 +40,7 @@ login_information = [
 ]
 ```
 
-Only the `[emulator]` section is required—the rest is optional and can be customized as needed. Once the `simulator.toml` file is updated, your simulator will appear in the main menu of TimeDial.org.
+Only the `[emulator]` section is required-the rest is optional and can be customized as needed. Once the `simulator.toml` file is updated, your simulator will appear in the main menu of TimeDial.org.
 
 ## Compression
 
