@@ -1,4 +1,11 @@
-# Welcome to TimeDial.org
+```
+  _____  _                   ____   _         _                      
+ |_   _|(_) _ __ ___    ___ |  _ \ (_)  __ _ | |    ___   _ __  __ _ 
+   | |  | || '_ ` _ \  / _ \| | | || | / _` || |   / _ \ | '__|/ _` |
+   | |  | || | | | | ||  __/| |_| || || (_| || | _| (_) || |  | (_| |
+   |_|  |_||_| |_| |_| \___||____/ |_| \__,_||_|(_)\___/ |_|   \__, |
+                                                               |___/ 
+```
 
 **TimeDial.org** is a public [BBS](https://en.wikipedia.org/wiki/Bulletin_board_system)-style system that you can access through a browser (coming soon), SSH, Telnet, or a raw TCP socket.
 
@@ -6,7 +13,7 @@ Whether you're logging in with a modern terminal or a real vintage setup, TimeDi
 
 TimeDial is built with true vintage compatibility in mind. The interface dynamically adapts to both 40- and 80-column displays, meaning it works just as well on a real terminal as on a modern terminal emulator. It's also optimized for slow connections and remains usable even at 1200 baud.
 
-## How to Connect
+# How to Connect
 
 Connect using any of the following ports with the username `guest` and the password `guest`. The system will guide you through creating a new account. Once that's done, simply log in again using your personal username and password.
 
@@ -16,11 +23,11 @@ Connect using any of the following ports with the username `guest` and the passw
 
 **Privacy Note:** While passwords are encrypted on the server, Telnet and raw TCP connections transmit credentials in plain text. Don't store anything important on the server and use a unique password you don't use elsewhere.
 
-## What You'll Find Inside
+# What You'll Find Inside
 
 The platform is still in its early stages, but already offers:
 
-### Classic Simulated Hardware
+## Classic Simulated Hardware
 
 Run real software on simulated vintage systems. Always wanted to try out BSD UNIX but don't have a PDP-11 lying around? Now's your chance!
 
@@ -32,7 +39,7 @@ Each simulator runs as a private instance, with disk images and configuration fi
 
 [More information about the simulators](simulators.md)
 
-### Interactive Shells: Bash and C-Shell
+## Interactive Shells: Bash and C-Shell
 
 Access your own home directory, manage files, create scripts - the power of Unix is at your fingertips.
 
@@ -42,7 +49,7 @@ Currently available shells:
 - **C Shell (csh)**
 - More on the way - request your favorite!
 
-### Classic Games
+## Classic Games
 
 Step into the world of early interactive entertainment with text-based adventures and dungeon crawlers that helped define entire genres.
 
@@ -52,14 +59,14 @@ Step into the world of early interactive entertainment with text-based adventure
 - **Zork II: The Wizard of Frobozz (1981)** - Face the cunning wizard and descend deeper.  
 - **Zork III: The Dungeon Master (1982)** - Confront fate and face your ultimate test.
 
-### Tools
+## Tools
 
 Communicate with others or explore the web - all from the command line.
 
 - **Mail** - Traditional Unix mail client (limited to internal messaging)  
 - **Lynx** - A text-based web browser that lets you explore the modern web from a vintage terminal
 
-## Rules
+# Rules
 
 This is a shared space - treat it like your favorite old machine: with curiosity and care!
 
