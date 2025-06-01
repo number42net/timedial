@@ -12,8 +12,7 @@ RUN pip3 install Markdown jinja2 certbot
 RUN cd /opt/timedial/src; python3 generate.py
 RUN mkdir /var/www/letsencrypt
 
-COPY timedial_http.conf /etc/nginx/conf.d/
-COPY timedial_https.conf /etc/nginx/conf.d/
+COPY timedial.conf /etc/nginx/conf.d/
 
 COPY entrypoint.sh /
 
