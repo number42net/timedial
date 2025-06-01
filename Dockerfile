@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 
 # Update and install required packages for system
 # Generate man pages, locales, etc.
+COPY files/etc/apt/sources.list /etc/apt/sources.list
 ENV DEBIAN_FRONTEND=noninteractive
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 RUN apt-get -qq update && dpkg -S /usr/share/man/ |sed 's|, |\n|g;s|: [^:]*$||' | xargs apt-get install --reinstall -y
