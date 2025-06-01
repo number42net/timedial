@@ -41,14 +41,14 @@
     - files/ssh_host_rsa_key
     - files/ssh_host_rsa_key.pub
 
-- name: Rebuild image
+- name: Rebuild images
   ansible.builtin.shell: docker compose build
   args:
     chdir: /opt/timedial
   when: gitrepo.changed
   tags: ["never", "redeploy"]
 
-- name: Rebuild container
+- name: Recreating containers
   ansible.builtin.shell: COMPOSE_PROFILES=production docker compose up --detach
   args:
     chdir: /opt/timedial
