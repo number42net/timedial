@@ -1,0 +1,18 @@
+[emulator] # Required
+label = "PDP-11 with Verion 7 UNIX"
+command = "pdp11 pdp11.ini"
+
+[description] # Optional
+publisher = "AT&T Bell Laboratories"
+original_date = "1973"
+version = "7"
+version_date = "1979"
+text = [
+    "Digital Equipment Corporations' famous 1975 PDP-11/45, running the last true Bell Labs UNIX",
+]
+login_information = [
+    "At the '@' prompt, enter: boot",
+    "At the ':' prompt, enter: rl(0,0)rl2unix to boot from the RL hard drive",
+    "At the '#' prompt, press CTR+D to continue booting into multiuser mode",
+    "Login with root / root",
+]
