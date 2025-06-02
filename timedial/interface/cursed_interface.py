@@ -93,7 +93,7 @@ class Menu:
         self.menu.selected_index = location
 
         self.current_data = menu_data
-        self.current_item = menu_data.items[0]
+        self.current_item = menu_data.items[location]
         self.update_description()
 
         self.menu.refresh()
