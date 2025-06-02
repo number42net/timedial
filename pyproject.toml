@@ -19,6 +19,7 @@ timedial-auth-pam-module = "timedial.accounts.pam_module:pam_module"
 timedial-auth-get-pub-keys = "timedial.accounts.get_pub_keys:main"
 timedial-login = "timedial.login:main"
 timedial-start-sim = "timedial.other.start_sim:main"
+timedial-starwars = "timedial.other.ascii_player:run"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
