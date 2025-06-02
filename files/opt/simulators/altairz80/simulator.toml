@@ -1,0 +1,23 @@
+[emulator] # Required
+label = "Altair 8800 with CP/M 3"
+command = "altairz80 altairz80.ini"
+
+[description] # Optional
+publisher = "Digital Research"
+original_date = "1974"
+version = "3.0"
+version_date = "1983"
+text = [
+    "The legendary MITS Altair 8800, supercharged with a Z80 and loaded with eight drives brimming with classic software.",
+    "All software courtesy of schorn.ch",
+]
+login_information = [
+    "Drive A: CP/M 3.0",
+    "Drive B: Games (Adventure (Colossal Cave), Catchum, Worm, Ladder, Rogue, Wanderer, Sargon",
+    "Drive C: dBASE II Version 2.4",
+    "Drive D: WordStar 4.0",
+    "Drive E: SuperCalc 1.0",
+    "Drive F: Microsoft COBOL 4.65",
+    "Drive G: Microsoft FORTRAN-80 3.3 / 3.4",
+    "Drive H: JANUS/ADA 1.5.0",
+]
