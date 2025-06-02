@@ -1,3 +1,18 @@
+- name: "Fix permissions" # Fix permissions after testing with rsync
+  ansible.builtin.file:
+    path: "/opt/timedial"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  tags: ["never", "redeploy"]
+
+- name: Rest repo # Fix repo after testing with rsync
+  ansible.builtin.shell: git reset --hard
+  args:
+    chdir: /opt/timedial
+  tags: ["never", "redeploy"]
+
 - name: "Clone repo"
   git:
     repo: "https://github.com/number42net/timedial.git"
