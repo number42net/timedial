@@ -16,6 +16,18 @@ services:
     volumes:
       - simh-bin:/opt/simh/bin
       - simh-src:/opt/simh/src
+  webssh:
+    container_name: timedial-webssh
+    profiles: [production]
+    image: python:3.12
+    command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
+  slowproxy:
+    container_name: timedial-slowproxy
+    build: sidecars/slowproxy
+    ports:
+      - "1223:1223"   # Telnet
+      - "2423:2423"   # Telnet
+      - "9623:9623"   # Telnet
   timedial:
     build: .
     container_name: timedial

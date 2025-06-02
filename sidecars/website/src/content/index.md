@@ -17,6 +17,7 @@ TimeDial is built with true vintage compatibility in mind. The interface dynamic
 
 Connect using any of the following ports with the username `guest` and the password `guest`. The system will guide you through creating a new account. Once that's done, simply log in again using your personal username and password.
 
+- **Web SSH** Connect directly using your browser through our [WebSSH](/webssh/) client 
 - **22 - SSH** (recommended; use with [PuTTY](https://www.putty.org/) or similar)
 - **23 - Telnet**
 - **24 - Raw TCP** (least ideal, but useful for serial-to-TCP bridges or vintage terminals)

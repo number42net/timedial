@@ -27,6 +27,7 @@ RUN apt-get -qq update && apt-get install -y \
     mailutils \
     man \
     lynx \ 
+    unzip \
     && apt-get clean
 RUN python3.11 -m pip -q install --upgrade pip
 
