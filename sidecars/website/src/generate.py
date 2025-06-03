@@ -46,11 +46,21 @@ def validate(html: str) -> None:
 def clean_up(html: str) -> str:
     """Clean-up the HTML with indendations and fix links."""
     final = []
+    pre = False
     for line in html.split("\n"):
         # Replace .md links to .html
         line = line.replace('.md">', '.html">')
         # Replace html5 <br /> with html2 <br>
         line = line.replace("<br />", "<br>")
+        # Add a HR in front of every H1
+        line = line.replace("<h1>", "<hr><h1>")
+        # Fix &quot; in <PRE> blocks
+        if "<pre>" in line.lower():
+            pre = True
+        if "</pre>" in line.lower():
+            pre = False
+        if pre:
+            line = line.replace("&quot;", '"')
         final.append(line)
 
     return "\n".join(final)

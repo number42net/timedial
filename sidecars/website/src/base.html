@@ -1,11 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<head>
-    <title>TimeDial - {{ title }}</title>
-</head>
+<title>TimeDial - {{ title }}</title>
 
-<body>
+<body background="/static/recbg.jpg" bgcolor="#FFF6F0">
     <p>
         {% for page in all_pages %}
         {% if page == title %}
@@ -16,10 +13,9 @@
         {% if not loop.last %}&nbsp;&nbsp;&nbsp;{% endif %}
         {% endfor %}
         &nbsp;&nbsp;&nbsp;<a href="/webssh">Web based SSH</a>
+
     </p>
 
     {{ content }}
 
 </body>
-
-</html>

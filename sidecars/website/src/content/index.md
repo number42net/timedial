@@ -1,11 +1,12 @@
-```
+<!-- ```
   _____  _                   ____   _         _                      
  |_   _|(_) _ __ ___    ___ |  _ \ (_)  __ _ | |    ___   _ __  __ _ 
    | |  | || '_ ` _ \  / _ \| | | || | / _` || |   / _ \ | '__|/ _` |
    | |  | || | | | | ||  __/| |_| || || (_| || | _| (_) || |  | (_| |
    |_|  |_||_| |_| |_| \___||____/ |_| \__,_||_|(_)\___/ |_|   \__, |
                                                                |___/ 
-```
+``` -->
+<center><img src="/static/banner.gif" alt="Banner"></center>
 
 **TimeDial.org** is a public [BBS](https://en.wikipedia.org/wiki/Bulletin_board_system)-style system that you can access through a browser (coming soon), SSH, Telnet, or a raw TCP socket.
 
