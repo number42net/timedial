@@ -22,7 +22,7 @@ Connect using any of the following ports with the username `guest` and the passw
 - **23 - Telnet**
 - **24 - Raw TCP** (least ideal, but useful for serial-to-TCP bridges or vintage terminals)
 
-In addition, for those looking for the true vintage experience, it's possible o slow down your connection:
+In addition, for those seeking an authentic vintage experience, you can even slow down your connection:
 
 - **1223 - Telnet** Emulates a 1200 baud connection
 - **2423 - Telnet** Emulates a 2400 baud connection
