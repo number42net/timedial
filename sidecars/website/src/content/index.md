@@ -22,6 +22,11 @@ Connect using any of the following ports with the username `guest` and the passw
 - **23 - Telnet**
 - **24 - Raw TCP** (least ideal, but useful for serial-to-TCP bridges or vintage terminals)
 
+In addition, for those looking for the true vintage experience, it's possible o slow down your connection:
+- **1223 Telnet** Emulates a 1200 baud connection
+- **2423 Telnet** Emulates a 2400 baud connection
+- **9623 Telnet** Emulates a 9600 baud connection
+
 **Privacy Note:** While passwords are encrypted on the server, Telnet and raw TCP connections transmit credentials in plain text. Don't store anything important on the server and use a unique password you don't use elsewhere.
 
 # What You'll Find Inside
@@ -63,6 +68,7 @@ Step into the world of early interactive entertainment with text-based adventure
 - **Zork I: The Great Underground Empire (1980)** - Begin your quest for fame and fortune.  
 - **Zork II: The Wizard of Frobozz (1981)** - Face the cunning wizard and descend deeper.  
 - **Zork III: The Dungeon Master (1982)** - Confront fate and face your ultimate test.
+- **Classic BSD games** - All of the classic games from 2BSD and 4BSD
 
 ## Tools
 
@@ -70,6 +76,14 @@ Communicate with others or explore the web - all from the command line.
 
 - **Mail** - Traditional Unix mail client (limited to internal messaging)  
 - **Lynx** - A text-based web browser that lets you explore the modern web from a vintage terminal
+
+## Media and demo's
+
+See what your terminal can really do! 
+
+- **ASCII Star Wars** - Watch the original Star Wars in the best possible way
+- **VT100 player** - A large collection of VT100 animations, most of which also work on newer terminals
+- And many more! 
 
 # Rules
 
