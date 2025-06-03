@@ -40,8 +40,7 @@ echo "Starting services..."
 newaliases; postfix start # Postfix mail server
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
-# socat TCP-LISTEN:24,reuseaddr,fork EXEC:/bin/login,pty,setsid,stderr,raw,echo=0,sane & # Raw connection daemon
-socat TCP-LISTEN:24,reuseaddr,fork EXEC:"script -q -c /bin/login /dev/null",pty,setsid,stderr,raw,echo=0,sane &
+socat TCP-LISTEN:24,reuseaddr,fork EXEC:"/usr/local/bin/timedial-auth-raw-login",pty,setsid,stderr,raw,echo=0,sane &
 timedial-auth-create-user-daemon & # User creation daemon
 
 echo "Following logs..."

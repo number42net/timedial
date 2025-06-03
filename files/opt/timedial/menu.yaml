@@ -27,6 +27,196 @@ mainmenu:
   - name: "Games"
     description: "Fire up classic games from the golden era of text-based adventures and terminal crawlers."
     items:
+      - name: "BSD Games A-H"
+        description: 
+         - "A collection of text-based games that were originally distributed with the Berkeley Software Distribution (BSD) Unix operating system."
+        items:
+        - name: Adventure
+          description:
+          - An exploration game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/adventure"]
+        - name: Arithmetic
+          description:
+          - Quiz on simple arithmetic
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/arithmetic"]
+        - name: Atc
+          description:
+          - Air traffic controller game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/atc"]
+        - name: Backgammon
+          description:
+          - The game of backgammon
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/backgammon"]
+        - name: Battlestar
+          description:
+          - A tropical adventure game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/battlestar"]
+        - name: Boggle
+          description:
+          - Word search game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/boggle"]
+        - name: Canfield
+          description:
+          - The solitaire card game canfield
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/canfield"]
+        - name: Cribbage
+          description:
+          - The card game cribbage
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/cribbage"]
+        - name: Dab
+          description:
+          - Dots and Boxes game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/dab"]
+        - name: Go Fish
+          description:
+          - Play “Go Fish”
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/go-fish"]
+        - name: Gomoku
+          description:
+          - Game of 5 in a row
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/gomoku"]
+        - name: Hack
+          description:
+          - Exploring The Dungeons of Doom
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/hack"]
+        - name: Hangman
+          description:
+          - Computer version of the game hangman
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/hangman"]
+        - name: Hunt
+          description:
+          - A multi-player multi-terminal game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/hunt"]
+      - name: "BSD Games I-Z"
+        description: 
+         - "A collection of text-based games that were originally distributed with the Berkeley Software Distribution (BSD) Unix operating system."
+        items:
+        - name: Mille
+          description:
+          - Play Mille Bornes
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/mille"]
+        - name: Monop
+          description:
+          - Monopoly game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/monop"]
+        - name: Phantasia
+          description:
+          - An interterminal fantasy game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/phantasia"]
+        - name: Quiz
+          description:
+          - Random knowledge tests
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/quiz"]
+        - name: Robots
+          description:
+          - Fight off villainous robots
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/robots"]
+        - name: Sail
+          description:
+          - Multi-user wooden ships and iron men
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/sail"]
+        - name: Snake
+          description:
+          - Display chase game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/snake"]
+        - name: Tetris Bsd
+          description:
+          - The game of tetris
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/tetris-bsd"]
+        - name: Trek
+          description:
+          - Trekkie game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/trek"]
+        - name: Wargames
+          description:
+          - Shall we play a game?
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/wargames"]
+        - name: Worm
+          description:
+          - Play the growing worm game
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/worm"]
+        - name: Wump
+          description:
+          - Hunt the wumpus in an underground cave
+          command:
+            publisher: BSD
+            original_date: 1970s-1980s
+            exec: ["/usr/games/wump"]
       - name: "Rogue"
         description: 
           - "The dungeon that started a genre."
@@ -35,7 +225,7 @@ mainmenu:
         command:
           publisher: "Michael Toy and Glenn Wichman"
           original_date: "1980"
-          exec: ["/opt/games/rogue36"]
+          exec: ["/usr/games/rogue36"]
       - name: "Zork"
         description: 
           - "The legendary underground adventure that started it all."
@@ -46,7 +236,7 @@ mainmenu:
           original_date: "1977"
           version: "v16"
           version_date: "1997"
-          exec: ["/usr/games/frotz", "/opt/games/zork/zork.z5"]
+          exec: ["/usr/games/frotz", "/usr/games/zork/zork.z5"]
       - name: "Zork I"
         description: 
           - "The Great Underground Empire"
@@ -56,7 +246,7 @@ mainmenu:
           original_date: "1980"
           version: "v88"
           version_date: "1983"
-          exec: ["/usr/games/frotz", "/opt/games/zork/zork1.dat"]
+          exec: ["/usr/games/frotz", "/usr/games/zork/zork1.dat"]
       - name: "Zork II"
         description: 
           - "The Wizard of Frobozz"
@@ -66,7 +256,7 @@ mainmenu:
           original_date: "1981"
           version: "v48"
           version_date: "1983"
-          exec: ["/usr/games/frotz", "/opt/games/zork/zork2.z3"]
+          exec: ["/usr/games/frotz", "/usr/games/zork/zork2.z3"]
       - name: "Zork III"
         description: 
           - "The Dungeon Master"
@@ -76,7 +266,7 @@ mainmenu:
           original_date: "1982"
           version: "v17"
           version_date: "1982"
-          exec: ["/usr/games/frotz", "/opt/games/zork/zork3.z3"]
+          exec: ["/usr/games/frotz", "/usr/games/zork/zork3.z3"]
   - name: "Media and demos"
     description:
       - "Media, Demos and tests to show off your cool terminal"
@@ -88,6 +278,12 @@ mainmenu:
           publisher: "Simon Jansen"
           exec: ["/usr/local/bin/timedial-starwars"]
           verion:  "January 2015"
+      - name: "VT-100 player"
+        description:
+          - "Play animations on your terminal! Works best on a VT-100, but most also function on XTERM"
+          - "Animation files courtesy of artscene.textfiles.com"
+        command:
+          exec: ["/usr/local/bin/timedial-vt100-player"]
       - name: "vttest"
         description:
           - "Test your terminals compatibility"
@@ -95,7 +291,20 @@ mainmenu:
           publisher: "Thomas E. Dickey"
           version: "2.7"
           exec: ["/usr/bin/vttest"]
-
+      - name: Rain
+        description:
+        - Animated raindrops display
+        command:
+          publisher: BSD
+          original_date: 1970s-1980s
+          exec: ["/usr/games/rain"]
+      - name: Worms
+        description:
+        - Animate worms on a display terminal
+        command:
+          publisher: BSD
+          original_date: 1970s-1980s
+          exec: ["/usr/games/worms"]
   - name: "Tools"
     description:
       - "Classic Unix tools for everyday tasks."

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 import logging
 import os
 import subprocess
+import sys
+import termios
 
 from timedial.interface import cursed_interface
 from timedial.logger import ui_logger_config
@@ -41,24 +43,23 @@ def set_terminal() -> None:
         supported_terminals = [i.strip() for i in file.readlines()]
 
     print(
-        "Please provide some details about your terminal. If in doubt, "
-        "choose xterm-color for a modern terminal emulator, or vt100 or ansi for a vintage terminal"
+        "\nPlease provide some details about your terminal. If in doubt choose xterm-color\n"
+        "for a modern terminal emulator, or vt100 or ansi for a vintage terminal."
     )
-    print("If you're in doubt about the size, use 80 columns and 24 lines")
+    print("\nIf you're in doubt about the size, use 80 columns and 24 lines.\n")
 
     terminal = ""
     while not terminal:
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
         value = input("Terminal type: ")
         if value in supported_terminals:
             terminal = value
         else:
-            print(
-                f"Unknown terminal type: '{value}'. If in doubt, "
-                "choose xterm-color for a modern terminal emulator, or vt100 or ansi for a vintage terminal"
-            )
+            print(f"Unknown terminal type: '{value}'.")
 
     cols = ""
     while not cols:
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
         value = input("Columns: ")
         if not value.isdigit():
             print("Columns needs to be an integer")
@@ -69,6 +70,7 @@ def set_terminal() -> None:
 
     rows = ""
     while not rows:
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
         value = input("Rows: ")
         if not value.isdigit():
             print("Rows needs to be an integer")

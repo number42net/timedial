@@ -1,4 +1,4 @@
-Banner /etc/issue.net
+Banner /etc/prelogin_banner
 UsePAM yes
 ChallengeResponseAuthentication yes
 

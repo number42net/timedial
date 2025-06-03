@@ -20,6 +20,7 @@ timedial-auth-get-pub-keys = "timedial.accounts.get_pub_keys:main"
 timedial-login = "timedial.login:main"
 timedial-start-sim = "timedial.other.start_sim:main"
 timedial-starwars = "timedial.other.ascii_player:run"
+timedial-vt100-player = "timedial.other.vt100_player:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

@@ -3,36 +3,60 @@
 ASCII Art (Star Wars) from https://www.asciimation.co.nz/
 """
 
-import asyncio
+import curses
 import os
 import sys
-from asyncio import sleep
+import time
 
 starwars_file_path = "/opt/demos/starwars.txt"
-os.system("clear")
-LPS = 14  ## Lines per frame
+
+LPF = 14  ## Lines per frame
+COLUMNS = 68  # Width of the frame
 
 
-async def main() -> None:
-    """Main player."""
+def main(window: curses.window) -> None:
+    """Play the animation."""
+    with open(starwars_file_path) as f:
+        lines = f.readlines()
+
     try:
-        with open(starwars_file_path) as f:
-            podaci = f.read().split("\n")
-        print("\n" * LPS)
-    except FileNotFoundError:
-        print(f"File {starwars_file_path} does not exist. \nMake sure file is in the same directory as this script and try again.")
-        sys.exit(1)
+        curses.curs_set(0)
+        cursor = False
+    except curses.error:
+        cursor = True
+        pass  # Terminal doesn't support hiding the cursor
 
-    ## Each frame is 67 columns by 14 rows, so interating the file in chunks of LPS lines
-    for i in range(0, len(podaci), LPS):
-        print("\x1b[{}A\x1b[J{}".format(LPS, "\n".join(podaci[i + 1 : i + LPS])))  # \x1b[{}A\x1b[J move ESC char 14 lines
-        await sleep(int(podaci[i]) * 67 / 1000)  ## Delay = 67
+    frames = [lines[i : i + LPF] for i in range(0, len(lines), LPF)]
+
+    previous_frame = [" " * COLUMNS for _ in range(LPF - 1)]  # Exclude timestamp line
+
+    for frame in frames:
+        frame_time = int(frame[0])
+        content_lines = frame[1:]
+
+        for y, line in enumerate(content_lines):
+            line = line.rstrip("\n").ljust(COLUMNS)
+            prev_line = previous_frame[y]
+
+            if line != prev_line:
+                for x, (new_char, old_char) in enumerate(zip(line, prev_line)):
+                    if new_char != old_char:
+                        window.addch(y + 1, x + 1, new_char.encode("ascii"))  # +1 for 1-based coord
+
+            previous_frame[y] = line  # Update previous frame
+
+        window.refresh()
+        if cursor:
+            window.move(1, 24)
+        time.sleep(frame_time * 0.06)  # frametime * 1/15 seconds
 
 
 def run() -> None:
-    """Start the main player as asyncio."""
+    """Start main with curses wrapper."""
+    os.system("clear")
+
     try:
-        asyncio.run(main())
+        curses.wrapper(main)
     except KeyboardInterrupt:
         sys.exit(0)
 

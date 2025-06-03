@@ -28,16 +28,17 @@ RUN apt-get -qq update && apt-get install -y \
     man \
     lynx \ 
     unzip \
-    vttest \
     && apt-get clean
 RUN python3.11 -m pip -q install --upgrade pip
 
 # Simh requirements
 RUN apt-get -qq update && apt-get install -y libpcre3-dev libedit-dev libpng-dev libsdl2-dev libvdeplug-dev libpcap-dev expect rsync libsdl2-ttf-dev curl
 
-# Install games
+# Install games, etc
 RUN apt-get -qq update && apt-get install -y frotz
 RUN apt-get -qq update && apt-get install -y bsdgames bsdgames-nonfree
+RUN apt-get -qq update && apt-get install -y vttest
+RUN apt-get -qq update && apt-get install -y bb
 
 # Remove legal message on first login
 RUN rm /etc/legal

@@ -1,4 +1,4 @@
 #!/bin/sh
 # VT-100 terminals require both newline and carriage return! 
 awk '{printf "%s\r\n", $0}' /etc/prelogin_banner
-exec /usr/sbin/in.telnetd
+script -q -c /bin/login /dev/null

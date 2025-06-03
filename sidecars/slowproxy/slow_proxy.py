@@ -24,14 +24,13 @@ import time
 HOST = "timedial"
 
 
-def throttle_relay(src: socket.socket, dst: socket.socket, baud: int, direction: str) -> None:
+def throttle_relay(src: socket.socket, dst: socket.socket, baud: int) -> None:
     """Relays data from one socket to another with throttling to simulate baud rate.
 
     Args:
         src (socket.socket): Source socket to read from.
         dst (socket.socket): Destination socket to send to.
         baud (int): Baud rate for throttling.
-        direction (str): String label for the direction of relay (e.g., 'TX' or 'RX').
     """
     try:
         while True:
@@ -40,30 +39,13 @@ def throttle_relay(src: socket.socket, dst: socket.socket, baud: int, direction:
                 break
             dst.sendall(data)
             time.sleep(1 / (baud // 10))
-    except (ConnectionResetError, BrokenPipeError):
+    except (ConnectionResetError, BrokenPipeError, OSError):
         pass
-    finally:
-        try:
-            dst.shutdown(socket.SHUT_WR)
-        except OSError:
-            pass
 
-
-def handle_client(client_sock: socket.socket, rport: int, baud: int) -> None:
-    """Handles a new client connection by creating a remote connection and relaying data.
-
-    Args:
-        client_sock (socket.socket): Client socket connected to the emulator.
-        rport: Remote TCP port
-        baud: Baud rate
-    """
     try:
-        remote_sock: socket.socket = socket.create_connection((HOST, rport))
-        print(f"Connected to remote {HOST}:{rport}")
-        threading.Thread(target=throttle_relay, args=(client_sock, remote_sock, baud, "TX"), daemon=True).start()
-        throttle_relay(remote_sock, client_sock, baud, "RX")
-    finally:
-        client_sock.close()
+        dst.shutdown(socket.SHUT_WR)
+    except OSError:
+        pass
 
 
 def start_tcp_server(lport: int, rport: int, baud: int) -> None:
@@ -84,7 +66,10 @@ def start_tcp_server(lport: int, rport: int, baud: int) -> None:
         while True:
             client_sock, addr = server_sock.accept()
             print(f"[TCP] Emulator connected from {addr}")
-            threading.Thread(target=handle_client, args=(client_sock, rport, baud), daemon=True).start()
+            remote_sock: socket.socket = socket.create_connection((HOST, rport))
+            print(f"Connected to remote {HOST}:{rport}")
+            threading.Thread(target=throttle_relay, args=(client_sock, remote_sock, baud), daemon=True).start()
+            threading.Thread(target=throttle_relay, args=(remote_sock, client_sock, baud), daemon=True).start()
 
     threading.Thread(target=loop, daemon=True).start()
 
