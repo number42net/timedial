@@ -69,8 +69,7 @@ class Menu:
         self.menu = menu_window
         self.description = description_window
         self.data = load_menu()
-        self.previous_menu: MainMenu | MenuItem = self.data
-        self.previous_menu_location = 0
+        self.history: list[tuple[MenuItem | MainMenu, int]] = []
 
         self.display_menu(self.data)
 
@@ -107,21 +106,28 @@ class Menu:
         if key == curses.KEY_UP or key == curses.KEY_DOWN:
             self.menu_move(key)
             curses.doupdate()
-        elif key == 10 and self.current_item.items:  # and self.current_item.items[self.menu.selected_index].items:
-            self.previous_menu = self.current_data
-            self.previous_menu_location = self.menu.selected_index
+
+        elif key == 10 and self.current_item.items:
+            self.history.append((self.current_data, self.menu.selected_index))
             self.display_menu(self.current_item)
             curses.doupdate()
+
         elif key == 10 and self.current_item.command:
             self.execute()
+
         elif key == 10 and self.current_item.callable:
-            self.previous_menu = self.current_data
-            self.previous_menu_location = self.menu.selected_index
+            self.history.append((self.current_data, self.menu.selected_index))
             self.display_menu(MENU_CALLABLES[self.current_item.callable]())
             curses.doupdate()
+
         elif key == 27 or key == curses.KEY_LEFT:
-            self.display_menu(self.previous_menu, self.previous_menu_location)
-            curses.doupdate()
+            if self.history:
+                prev_data, prev_index = self.history.pop()
+                self.display_menu(prev_data, prev_index)
+                curses.doupdate()
+            else:
+                logger.debug("No previous menu to return to.")
+
         else:
             logger.debug(f"Unknown key: {key}")
 
