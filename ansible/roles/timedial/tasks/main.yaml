@@ -5,12 +5,22 @@
     owner: "root"
     group: "root"
     mode: "0755"
-  tags: ["never", "redeploy"]
+  tags: ["redeploy"]
 
-- name: Rest repo # Fix repo after testing with rsync
-  ansible.builtin.shell: git reset --hard
+- name: Check if git repo is dirty
+  ansible.builtin.command: git status --porcelain
   args:
     chdir: /opt/timedial
+  register: git_status
+  changed_when: false
+  tags: ["never", "redeploy"]
+
+- name: Reset repo if dirty
+  ansible.builtin.shell: "git reset --hard && git clean -f"
+  args:
+    chdir: /opt/timedial
+  when: git_status.stdout != ""
+  register: git_reset
   tags: ["never", "redeploy"]
 
 - name: "Clone repo"
@@ -81,3 +91,12 @@
   args:
     chdir: /opt/timedial
   when: container_status.rc != 0
+
+- name: Schedule weekly website cron
+  ansible.builtin.cron:
+    name: "Weekly website restart"
+    minute: "5"
+    hour: "5"
+    weekday: "1"
+    job: "/usr/bin/docker restart timedial-website"
+    user: root

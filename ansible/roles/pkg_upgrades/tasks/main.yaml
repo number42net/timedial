@@ -1,5 +1,12 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600  
+
 - name: Run security upgrades only
-  ansible.builtin.command: unattended-upgrade -d
+  ansible.builtin.shell: unattended-upgrade -d
+  register: upgrade_result
+  changed_when: "'Packages that will be upgraded' in upgrade_result.stdout"
 
 - name: Remove hold on docker packages
   ansible.builtin.dpkg_selections:
@@ -34,4 +41,37 @@
     - containerd.io
     - docker-buildx-plugin
     - docker-compose-plugin
+  tags: ["never", "downtime"]
+
+- name: Upgrade all packages to the latest version
+  apt:
+    upgrade: dist
+  tags: ["never", "downtime"]
+
+- name: Get current running kernel version
+  command: uname -r
+  register: current_kernel
+  changed_when: false
+
+- name: Get highest installed kernel version
+  shell: |
+    dpkg --list | grep 'linux-image-[0-9]' | awk '{print $2}' | sed 's/linux-image-//' | sort -V | tail -n 1
+  register: latest_kernel
+  changed_when: false
+
+- name: Debug current and latest kernel versions
+  debug:
+    msg: "Current: {{ current_kernel.stdout }}, Latest: {{ latest_kernel.stdout }}"
+
+- name: Reboot if running kernel is older than latest installed kernel
+  reboot:
+    msg: "Rebooting to apply latest kernel"
+    reboot_timeout: 600
+  when: current_kernel.stdout != latest_kernel.stdout
+  tags: ["never", "downtime"]
+
+- name: Wait for host to come back
+  wait_for_connection:
+    delay: 10
+    timeout: 300
   tags: ["never", "downtime"]
