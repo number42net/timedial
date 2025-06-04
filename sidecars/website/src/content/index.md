@@ -8,7 +8,7 @@
 ``` -->
 <center><img src="/static/banner.gif" alt="Banner"></center>
 
-**TimeDial.org** is a public [BBS](https://en.wikipedia.org/wiki/Bulletin_board_system)-style system that you can access through a browser (coming soon), SSH, Telnet, or a raw TCP socket.
+**TimeDial.org** is a public [BBS](https://en.wikipedia.org/wiki/Bulletin_board_system)-style system that you can access through a browser, SSH, Telnet, or a raw TCP socket.
 
 Whether you're logging in with a modern terminal or a real vintage setup, TimeDial lets you explore a shell environment, play classic games, and even run authentic vintage software on simulated machines like the PDP-11 and VAX.
 
