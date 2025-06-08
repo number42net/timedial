@@ -21,6 +21,17 @@ services:
     profiles: [production]
     image: python:3.12
     command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
+  backup:
+    container_name: timedial-backup
+    profiles: [production]
+    build: sidecars/backup
+    volumes:
+      - type: bind
+        source: keys/private-keys/sidecars-backup.key
+        target: /root/.ssh/sidecars-backup.key
+        read_only: true
+      - timedial-home:/home:ro
+
   slowproxy:
     container_name: timedial-slowproxy
     build: sidecars/slowproxy
@@ -47,14 +58,13 @@ services:
         source: logs/wtmp
         target: /var/log/wtmp
       - type: bind
-        source: ssh_host_keys
+        source: keys/host_keys
         target: /mnt/ssh_host_keys
         read_only: true
       - timedial-data:/data
       - timedial-home:/home
       - timedial-mail:/var/mail
       - simh-bin:/opt/simh-bin:ro
-        
 volumes:
   timedial-data:
   timedial-home:

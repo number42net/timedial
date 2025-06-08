@@ -1,7 +1,9 @@
 # Project specific
 files/data
-ssh_host_keys/ssh_*
 logs/*
+*.key
+*_key
+*.pub
 NOTES.md
 deploy.sh
 ansible/ansible_log.txt
