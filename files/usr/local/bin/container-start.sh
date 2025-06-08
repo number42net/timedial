@@ -13,9 +13,6 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
   fi  
 done < /etc/passwd
 
-echo "Buidling simh..."
-bash /opt/simulators/build.sh
-
 echo "Preparing log files..."
 filename="/var/log/archive/messages-$(date '+%Y-%m-%d_%H-%M-%S').log"
 touch $filename
@@ -42,6 +39,7 @@ service ssh start # SSH daemon
 service xinetd start # Telnet daemon
 socat TCP-LISTEN:24,reuseaddr,fork EXEC:"/usr/local/bin/timedial-auth-raw-login",pty,setsid,stderr,raw,echo=0,sane &
 timedial-auth-create-user-daemon & # User creation daemon
+timedial-auth-session-reaper & # Idle session reaper
 
 echo "Following logs..."
 tail -F /var/log/messages # Show syslog

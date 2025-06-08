@@ -10,6 +10,7 @@ dependencies = [
     "ruamel.yaml==0.18.11",
     "bcrypt==4.3.0",
     "requests==2.32.3",
+    "psutil==7.0.0",
 ]
 
 [project.scripts]
@@ -17,6 +18,7 @@ timedial-auth-create-user = "timedial.accounts.create_user:create_user"
 timedial-auth-create-user-daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
 timedial-auth-pam-module = "timedial.accounts.pam_module:pam_module"
 timedial-auth-get-pub-keys = "timedial.accounts.get_pub_keys:main"
+timedial-auth-session-reaper = "timedial.accounts.session_reaper:main"
 timedial-login = "timedial.login:main"
 timedial-start-sim = "timedial.other.start_sim:main"
 timedial-starwars = "timedial.other.ascii_player:run"
@@ -33,6 +35,7 @@ dev = [
     "Markdown==3.8",
     "types-Markdown==3.8.0.20250415",
     "types-requests==2.32.0.20250515",
+    "types-psutil==7.0.0.20250601",
 ]
 ansible = ["ansible-core==2.18.6"]
 

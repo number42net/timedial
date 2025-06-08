@@ -36,6 +36,7 @@ class Config(BaseModel):
     stale_files_size: int = 20 * 1024 * 1024  # 20MiB
     stale_files_age: int = 24 * 3600  # 24 hours
     stale_files_sleep: int = 60 * 60  # Once per hour
+    max_idle_session: int = 60 * 30  # 30 minutes
 
     @property
     def ui_logger_path(self) -> str:
