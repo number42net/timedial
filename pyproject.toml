@@ -19,6 +19,7 @@ timedial-auth-create-user-daemon = "timedial.accounts.create_user_daemon:create_
 timedial-auth-pam-module = "timedial.accounts.pam_module:pam_module"
 timedial-auth-get-pub-keys = "timedial.accounts.get_pub_keys:main"
 timedial-auth-session-reaper = "timedial.accounts.session_reaper:main"
+timedial-auth-stale-files = "timedial.accounts.stale_files:main"
 timedial-login = "timedial.login:main"
 timedial-start-sim = "timedial.other.start_sim:main"
 timedial-starwars = "timedial.other.ascii_player:run"
@@ -50,7 +51,7 @@ select = [
     "F",   # pyflakes
     "I",   # isort
     "UP",  # pyupgrade
-    "B",   # bugbear
+    "B",   # bufgbear
     "N",   # pep8-naming
     "D",   # pydocstyle (docstring style)
     "RUF", # ruff-specific rules
