@@ -58,7 +58,7 @@ services:
         source: logs/wtmp
         target: /var/log/wtmp
       - type: bind
-        source: keys/host_keys
+        source: keys/host-keys
         target: /mnt/ssh_host_keys
         read_only: true
       - timedial-data:/data

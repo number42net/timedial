@@ -8,7 +8,7 @@
   tags: ["redeploy"]
 
 - name: Check if any users are logged in
-  ansible.builtin.command: /usr/bin/docker exec -it timedial who
+  ansible.builtin.command: /usr/bin/docker exec timedial who
   register: active_users
   changed_when: false
   tags: ["never", "redeploy"]
@@ -49,9 +49,25 @@
   args:
     creates: /opt/timedial/logs/wtmp
 
-- name: "SSH host key directory"
+- name: "SSH key directory"
   ansible.builtin.file:
-    path: "/opt/timedial/ssh_host_keys"
+    path: "/opt/timedial/keys"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0500"
+
+- name: "SSH host-key directory"
+  ansible.builtin.file:
+    path: "/opt/timedial/keys/host-keys"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0500"
+
+- name: "SSH host-key directory"
+  ansible.builtin.file:
+    path: "/opt/timedial/keys/private-keys"
     state: "directory"
     owner: "root"
     group: "root"
@@ -60,17 +76,27 @@
 - name: "Copy SSH host keys"
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "/opt/timedial/ssh_host_keys"
+    dest: "/opt/timedial/host-keys"
     owner: root
     group: root
     mode: '0400'
   loop:
-    - files/ssh_host_ecdsa_key
-    - files/ssh_host_ecdsa_key.pub
-    - files/ssh_host_ed25519_key
-    - files/ssh_host_ed25519_key.pub
-    - files/ssh_host_rsa_key
-    - files/ssh_host_rsa_key.pub
+    - keys/host-keys/ssh_host_ecdsa_key
+    - keys/host-keys/ssh_host_ecdsa_key.pub
+    - keys/host-keys/ssh_host_ed25519_key
+    - keys/host-keys/ssh_host_ed25519_key.pub
+    - keys/host-keys/ssh_host_rsa_key
+    - keys/host-keys/ssh_host_rsa_key.pub
+
+- name: "Copy private keys"
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/opt/timedial/private-keys"
+    owner: root
+    group: root
+    mode: '0400'
+  loop:
+    - keys/private-keys/sidecars-backup.key
 
 - name: Rebuild images
   ansible.builtin.shell: COMPOSE_PROFILES=production docker compose build
