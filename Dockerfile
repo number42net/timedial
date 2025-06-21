@@ -50,7 +50,7 @@ RUN sed -i '/pam_systemd.so/d' /etc/pam.d/common-session
 # Create users and groups
 # user guest is to create new accounts, guestusers group is for actual users
 RUN groupadd -g 999 guest
-RUN useradd -ms "/usr/local/bin/timedial-auth-create-user" -u 999 -g guest guest
+RUN useradd -ms "/usr/local/bin/timedial-priv-create-user" -u 999 -g guest guest
 RUN echo "guest:guest" | chpasswd guest
 RUN groupadd guestusers
 
@@ -67,8 +67,8 @@ RUN cd /opt/timedial/src; python3.11 -m pip -q install .
 
 # Set permissions
 RUN chmod +x /usr/local/bin/*
-RUN chown root:guest /usr/local/bin/timedial-auth*
-RUN chmod 0554 /usr/local/bin/timedial-auth*
+RUN chown root:guest /usr/local/bin/timedial-priv*
+RUN chmod 0554 /usr/local/bin/timedial-priv*
 RUN chmod -R a+r /opt/simulators
 
 # Start-up

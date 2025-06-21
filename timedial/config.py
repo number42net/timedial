@@ -34,12 +34,10 @@ class Config(BaseModel):
     ui_logger_level: int = logging.INFO
     auth_logger_level: int = logging.INFO
     stale_files_size: int = 20 * 1024 * 1024  # 20MiB
-    # stale_files_age: int = 24 * 3600  # 24 hours
-    # stale_files_sleep: int = 60 * 60  # Once per hour
+    stale_files_age: int = 24 * 3600  # 24 hours
+    stale_files_sleep: int = 60 * 60  # Once per hour
     max_idle_session: int = 60 * 30  # 30 minutes
-
-    stale_files_age: int = 60
-    stale_files_sleep: int = 10
+    stats_dir: str = "/data/stats"
 
     @property
     def ui_logger_path(self) -> str:

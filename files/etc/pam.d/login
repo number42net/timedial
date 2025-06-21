@@ -9,7 +9,7 @@
 auth optional   pam_faildelay.so  delay=3000000
 
 # Try try guest users:
-auth [success=done default=ignore] pam_exec.so expose_authtok /usr/local/bin/timedial-auth-pam-module
+auth [success=done default=ignore] pam_exec.so expose_authtok /usr/local/bin/timedial-priv-pam-module
 
 # Outputs an issue file prior to each login prompt (Replaces the
 # ISSUE_FILE option from login.defs). Uncomment for use

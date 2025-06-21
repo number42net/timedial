@@ -13,7 +13,7 @@ PrintLastLog no
 
 AcceptEnv TERM
 
-AuthorizedKeysCommand /usr/local/bin/timedial-auth-get-pub-keys
+AuthorizedKeysCommand /usr/local/bin/timedial-priv-get-pub-keys
 AuthorizedKeysCommandUser guest
 
 HostKey /mnt/ssh_host_keys/ssh_host_rsa_key

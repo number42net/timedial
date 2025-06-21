@@ -8,7 +8,8 @@ services:
       - "443:443"
     volumes:
       - certbot-etc:/etc/letsencrypt
-  simh:
+      - timedial-stats:/opt/timedial/html/stats:ro
+  simhbuilder:
     container_name: timedial-simhbuilder
     build: sidecars/simh-builder
     environment:
@@ -41,7 +42,7 @@ services:
       - "9623:9623"   # Telnet
   timedial:
     build: .
-    container_name: timedial
+    container_name: timedial-timedial
     hostname: timedial.org
     environment:
       DATA_DIR: /data
@@ -64,11 +65,13 @@ services:
       - timedial-data:/data
       - timedial-home:/home
       - timedial-mail:/var/mail
+      - timedial-stats:/data/stats
       - simh-bin:/opt/simh-bin:ro
 volumes:
   timedial-data:
   timedial-home:
   timedial-mail:
+  timedial-stats:
   certbot-etc:
   simh-bin:
   simh-src:

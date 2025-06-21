@@ -37,10 +37,11 @@ echo "Starting services..."
 newaliases; postfix start # Postfix mail server
 service ssh start # SSH daemon
 service xinetd start # Telnet daemon
-socat TCP-LISTEN:24,reuseaddr,fork EXEC:"/usr/local/bin/timedial-auth-raw-login",pty,setsid,stderr,raw,echo=0,sane &
-timedial-auth-create-user-daemon & # User creation daemon
-timedial-auth-session-reaper & # Idle session reaper
-timedial-auth-stale-files & # Stale files handler
+socat TCP-LISTEN:24,reuseaddr,fork EXEC:"/usr/local/bin/timedial-priv-raw-login",pty,setsid,stderr,raw,echo=0,sane &
+timedial-priv-create-user-daemon & # User creation daemon
+timedial-priv-session-reaper & # Idle session reaper
+timedial-priv-stale-files & # Stale files handler
+timedial-priv-stats-exporter & # Export statistics for website
 
 echo "Following logs..."
 tail -F /var/log/messages # Show syslog
