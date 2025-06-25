@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import logging
+import os
 import re
 import subprocess
 import time
@@ -71,7 +72,7 @@ def process_file(path: str) -> None:
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to create user {username}: {e}")
+        logger.error(f"Failed to create group {username}: {e}")
 
     try:
         logger.info(f"Creating user: {username}")
@@ -95,6 +96,18 @@ def process_file(path: str) -> None:
         )
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create user {username}: {e}")
+
+    try:
+        maildir = Path(os.path.join(os.path.expanduser(f"~{username}"), "Maildir"))
+        if maildir.exists() and not maildir.is_dir():
+            logger.warning(f"Maildir: {maildir} exists, but is not a directory!")
+            maildir.unlink()  # Deletes file, symlink, etc.
+        if not maildir.exists():
+            os.mkdir(maildir)
+        os.chown(maildir, userdata.id[0], userdata.id[1])
+        os.chmod(maildir, 0o700)
+    except Exception as exc:
+        logger.error(f"Failed to create maildir: {maildir}: {exc}")
 
     try:
         logger.info(f"Set user file ownership: {username}")

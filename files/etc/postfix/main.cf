@@ -24,3 +24,5 @@ biff = no
 append_dot_mydomain = no
 
 alias_maps = hash:/etc/aliases
+
+home_mailbox = Maildir/
