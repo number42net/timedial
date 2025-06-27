@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import curses
 import logging
-import mailbox
 import os
 import time
 from typing import TypeVar
@@ -285,31 +284,24 @@ class CursedInterface:
         self._all_windows.remove(window)
 
     def check_mail(self) -> int:
-        """Count the number of unread emails for the current user.
+        """Count the number of unread emails in the user's Maildir at ~/Maildir.
 
-        This method opens the user's mailbox located at /var/mail/{username}
-        and iterates through the messages. A message is considered unread
-        if the 'Status' header does not contain the letter 'R'.
+        A message is considered unread if it is in the 'new' subdirectory of the Maildir.
 
         Returns:
             int: The number of unread email messages.
 
         Raises:
-            None: Silently ignores FileNotFoundError if the mailbox file doesn't exist.
+            None: Silently ignores FileNotFoundError if the Maildir doesn't exist.
         """
-        unread_counter = 0
         try:
-            mbox = mailbox.mbox(f"/var/mail/{self.account_data.username}")
-            for message in mbox:
-                status = message.get("Status", "")
-                if "R" not in status:  # If 'R' is not present, it's unread
-                    unread_counter += 1
+            new_maildir_path = os.path.expanduser("~/Maildir/new")
+            return len([f for f in os.listdir(new_maildir_path) if os.path.isfile(os.path.join(new_maildir_path, f))])
         except FileNotFoundError:
-            pass
+            return 0
         except Exception as exc:
-            logger.exception(f"Failed to open mail: {exc}")
-
-        return unread_counter
+            logger.exception(f"Failed to read Maildir/new: {exc}")
+            return 0
 
 
 def main() -> None:
