@@ -8,7 +8,7 @@
   tags: ["redeploy"]
 
 - name: Check if any users are logged in
-  ansible.builtin.command: /usr/bin/docker exec timedial who
+  ansible.builtin.command: /usr/bin/docker exec timedial-timedial who
   register: active_users
   changed_when: false
   tags: ["never", "redeploy"]
