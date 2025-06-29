@@ -44,11 +44,6 @@
     group: "root"
     mode: "0755"
 
-- name: "Create wtmp log file"
-  ansible.builtin.shell: "touch /opt/timedial/logs/wtmp"
-  args:
-    creates: /opt/timedial/logs/wtmp
-
 - name: "SSH key directory"
   ansible.builtin.file:
     path: "/opt/timedial/keys"

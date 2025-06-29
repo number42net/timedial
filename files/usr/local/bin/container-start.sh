@@ -13,11 +13,6 @@ while IFS=: read -r username _ uid _ _ _ home shell; do
   fi  
 done < /etc/passwd
 
-echo "Preparing log files..."
-filename="/var/log/archive/messages-$(date '+%Y-%m-%d_%H-%M-%S').log"
-touch $filename
-ln -sf $filename /var/log/messages
-
 echo "Applying permissions..."
 chown -R root:root /var/log/*
 chmod -R ug=rw,ug+X,o= /var/log/*

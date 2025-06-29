@@ -2,6 +2,8 @@ services:
   website:
     # profiles: [production]
     container_name: timedial-website
+    logging:
+      driver: journald
     build: sidecars/website
     ports:
       - "80:80"
@@ -11,6 +13,8 @@ services:
       - timedial-stats:/opt/timedial/html/stats:ro
   simhbuilder:
     container_name: timedial-simhbuilder
+    logging:
+      driver: journald
     build: sidecars/simh-builder
     environment:
       COMMIT: "f3c61c315a83ace8f2676bdc878962bf4528b5a6"
@@ -19,11 +23,15 @@ services:
       - simh-src:/opt/simh/src
   webssh:
     container_name: timedial-webssh
+    logging:
+      driver: journald
     # profiles: [production]
     image: python:3.12
     command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
   backup:
     container_name: timedial-backup
+    logging:
+      driver: journald
     profiles: [production]
     build: sidecars/backup
     volumes:
@@ -34,6 +42,8 @@ services:
       - timedial-home:/home:ro
   mail:
     container_name: timedial-mail
+    logging:
+      driver: journald
     # profiles: [production]
     build: sidecars/mail
     ports:
@@ -41,14 +51,13 @@ services:
       - "993:993" # IMAP SSL
       - "587:587" # SMTP submission
     volumes:
-      - type: bind
-        source: logs/archive
-        target: /var/log/archive
       - timedial-data:/data:ro
       - timedial-home:/home
       - certbot-etc:/etc/letsencrypt
   ftp:
     container_name: timedial-ftp
+    logging:
+      driver: journald
     # profiles: [production]
     build: sidecars/ftp
     ports:
@@ -56,14 +65,13 @@ services:
       - "990:990"
       - "40000-40100:40000-40100"  # Passive data ports
     volumes:
-      - type: bind
-        source: logs/archive
-        target: /var/log/archive
       - timedial-data:/data:ro
       - timedial-home:/home
       - certbot-etc:/etc/letsencrypt
   slowproxy:
     container_name: timedial-slowproxy
+    logging:
+      driver: journald
     build: sidecars/slowproxy
     ports:
       - "1223:1223"   # Telnet
@@ -72,6 +80,8 @@ services:
   timedial:
     build: .
     container_name: timedial-timedial
+    logging:
+      driver: journald
     hostname: timedial.org
     environment:
       DATA_DIR: /data
@@ -81,12 +91,6 @@ services:
       - "24:24"   # Raw socket
     restart: unless-stopped
     volumes:
-      - type: bind
-        source: logs/archive
-        target: /var/log/archive
-      - type: bind
-        source: logs/wtmp
-        target: /var/log/wtmp
       - type: bind
         source: keys/host-keys
         target: /mnt/ssh_host_keys
