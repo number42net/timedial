@@ -9,36 +9,45 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - timedial-stats:/opt/timedial/html/stats:ro
-  simhbuilder:
-    container_name: timedial-simhbuilder
-    build: sidecars/simh-builder
-    environment:
-      COMMIT: "f3c61c315a83ace8f2676bdc878962bf4528b5a6"
+  webaccount:
+    container_name: timedial-webaccount
+    build: sidecars/webaccount
     volumes:
-      - simh-bin:/opt/simh/bin
-      - simh-src:/opt/simh/src
-  webssh:
-    container_name: timedial-webssh
-    profiles: [production]
-    image: python:3.12
-    command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
-  backup:
-    container_name: timedial-backup
-    profiles: [production]
-    build: sidecars/backup
-    volumes:
-      - type: bind
-        source: keys/private-keys/sidecars-backup.key
-        target: /root/.ssh/sidecars-backup.key
-        read_only: true
-      - timedial-home:/home:ro
-
-  slowproxy:
-    container_name: timedial-slowproxy
-    build: sidecars/slowproxy
+      - timedial-data:/data
+      - timedial-home:/home
+      - timedial-stats:/data/stats
     ports:
-      - "1223:1223"   # Telnet
-      - "2423:2423"   # Telnet
+      - "5000:5000"
+  # simhbuilder:
+  #   container_name: timedial-simhbuilder
+  #   build: sidecars/simh-builder
+  #   environment:
+  #     COMMIT: "f3c61c315a83ace8f2676bdc878962bf4528b5a6"
+  #   volumes:
+  #     - simh-bin:/opt/simh/bin
+  #     - simh-src:/opt/simh/src
+  # webssh:
+  #   container_name: timedial-webssh
+  #   profiles: [production]
+  #   image: python:3.12
+  #   command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
+  # backup:
+  #   container_name: timedial-backup
+  #   profiles: [production]
+  #   build: sidecars/backup
+  #   volumes:
+  #     - type: bind
+  #       source: keys/private-keys/sidecars-backup.key
+  #       target: /root/.ssh/sidecars-backup.key
+  #       read_only: true
+  #     - timedial-home:/home:ro
+
+  # slowproxy:
+  #   container_name: timedial-slowproxy
+  #   build: sidecars/slowproxy
+  #   ports:
+  #     - "1223:1223"   # Telnet
+  #     - "2423:2423"   # Telnet
       - "9623:9623"   # Telnet
   timedial:
     build: .
@@ -64,7 +73,6 @@ services:
         read_only: true
       - timedial-data:/data
       - timedial-home:/home
-      - timedial-mail:/var/mail
       - timedial-stats:/data/stats
       - simh-bin:/opt/simh-bin:ro
 volumes:
