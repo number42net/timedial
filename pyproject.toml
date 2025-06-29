@@ -13,6 +13,9 @@ dependencies = [
     "psutil==7.0.0",
 ]
 
+[tool.setuptools.packages.find]
+include = ["timedial"]
+
 [project.scripts]
 timedial-priv-create-user = "timedial.accounts.create_user:create_user"
 timedial-priv-create-user-daemon = "timedial.accounts.create_user_daemon:create_user_daemon"
