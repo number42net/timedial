@@ -1,0 +1,36 @@
+# Only listen on localhost
+inet_interfaces = all
+
+# Your actual system hostname and domain
+myhostname = timedial.org
+mydomain = timedial.org
+
+# What appears in From: headers when sending mail as just "user"
+myorigin = $mydomain
+
+# Domains Postfix will accept mail for (local delivery only)
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+# Disable relaying
+mynetworks_style = host
+relayhost =
+transport_maps = hash:/etc/postfix/transport
+
+# Do not receive from network
+smtpd_recipient_restrictions = permit_mynetworks, reject
+
+# Disable unnecessary features
+smtpd_banner = localhost ESMTP
+biff = no
+append_dot_mydomain = no
+
+# Short timeouts
+maximal_queue_lifetime = 1m
+minimal_backoff_time = 10s
+maximal_backoff_time = 30s
+queue_run_delay = 15s
+bounce_queue_lifetime = 1m
+
+alias_maps = hash:/etc/aliases
+
+home_mailbox = Maildir/

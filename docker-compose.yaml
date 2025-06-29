@@ -32,20 +32,21 @@ services:
         target: /root/.ssh/sidecars-backup.key
         read_only: true
       - timedial-home:/home:ro
-  imap:
-    container_name: timedial-imap
+  mail:
+    container_name: timedial-mail
     profiles: [production]
-    build: sidecars/imap
+    build: sidecars/mail
     ports:
       - "143:143" # IMAP
       - "993:993" # IMAP SSL
+      - "587:587" # SMTP submission
     volumes:
       - type: bind
         source: logs/archive
         target: /var/log/archive
       - timedial-data:/data:ro
       - timedial-home:/home
-      - certbot-etc:/etc/letsencrypt:ro
+      - certbot-etc:/etc/letsencrypt
   slowproxy:
     container_name: timedial-slowproxy
     build: sidecars/slowproxy
