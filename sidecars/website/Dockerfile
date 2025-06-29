@@ -1,8 +1,6 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get -qq update
-
-RUN apt-get install -y nginx python3-pip libaugeas-dev
+RUN apt-get -qq update; apt-get install -y nginx python3-pip libaugeas-dev
 RUN pip3 install Markdown jinja2 certbot
 
 RUN mkdir /opt/timedial

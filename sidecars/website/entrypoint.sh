@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ -f /etc/letsencrypt/live/timedial.org/fullchain.pem ]]; then
     certbot renew

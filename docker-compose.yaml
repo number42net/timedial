@@ -1,6 +1,6 @@
 services:
   website:
-    profiles: [production]
+    # profiles: [production]
     container_name: timedial-website
     build: sidecars/website
     ports:
@@ -19,7 +19,7 @@ services:
       - simh-src:/opt/simh/src
   webssh:
     container_name: timedial-webssh
-    profiles: [production]
+    # profiles: [production]
     image: python:3.12
     command: sh -c "pip install git+https://github.com/number42net/timedial-webssh.git && /usr/local/bin/wssh --port=8000" 
   backup:
@@ -34,7 +34,7 @@ services:
       - timedial-home:/home:ro
   mail:
     container_name: timedial-mail
-    profiles: [production]
+    # profiles: [production]
     build: sidecars/mail
     ports:
       - "143:143" # IMAP
