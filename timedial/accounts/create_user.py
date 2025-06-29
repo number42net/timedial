@@ -133,6 +133,16 @@ def create_user() -> None:
             print("Waiting for user to be created, this should only take a few seconds...")
             time.sleep(5)
 
+    # Send email to root
+    msg = EmailMessage()
+    msg.set_content(f"Real name: {realname}\nEmail address: {email}")
+    msg["Subject"] = f"New user registration: {username}"
+    msg["From"] = "toor@timedial.org"
+    msg["To"] = "toor@timedial.org"
+    with smtplib.SMTP("localhost") as server:
+        server.send_message(msg)
+
+    # Send email to new user
     msg = EmailMessage()
     msg.set_content(WELCOME)
     msg["Subject"] = "Welcome to timedial"

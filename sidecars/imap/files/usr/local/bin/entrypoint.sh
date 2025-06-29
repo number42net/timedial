@@ -3,4 +3,8 @@
 /usr/sbin/dovecot # Dovecot
 timedial-priv-create-user-daemon --no-home-dir & # User creation daemon
 
+filename="/var/log/archive/imap-$(date '+%Y-%m-%d_%H-%M-%S').log"
+touch $filename
+ln -sf $filename /var/log/messages
+
 tail -F /var/log/messages # Show syslog

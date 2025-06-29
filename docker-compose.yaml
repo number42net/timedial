@@ -34,11 +34,15 @@ services:
       - timedial-home:/home:ro
   imap:
     container_name: timedial-imap
+    profiles: [production]
     build: sidecars/imap
     ports:
       - "143:143" # IMAP
       - "993:993" # IMAP SSL
-    volumes:  
+    volumes:
+      - type: bind
+        source: logs/archive
+        target: /var/log/archive
       - timedial-data:/data:ro
       - timedial-home:/home
       - certbot-etc:/etc/letsencrypt:ro
