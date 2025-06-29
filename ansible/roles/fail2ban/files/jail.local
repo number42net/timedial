@@ -10,11 +10,32 @@ backend = %(sshd_backend)s
 banaction = iptables
 banaction_ipv6 = ip6tables-multiport
 
-[timedial]
+[timedial-timedial]
 enabled = true
 filter  = timedial
 action  = iptables-multiport-docker
-logpath = /opt/timedial/logs/archive/*
+backend = systemd
+journalmatch = CONTAINER_NAME=timedial-timedial
+maxretry = 3
+bantime = 600
+findtime = 600
+
+[timedial-ftp]
+enabled = true
+filter  = timedial
+action  = iptables-multiport-docker
+backend = systemd
+journalmatch = CONTAINER_NAME=timedial-ftp
+maxretry = 3
+bantime = 600
+findtime = 600
+
+[timedial-mail]
+enabled = true
+filter  = timedial
+action  = iptables-multiport-docker
+backend = systemd
+journalmatch = CONTAINER_NAME=timedial-mail
 maxretry = 3
 bantime = 600
 findtime = 600
