@@ -28,6 +28,11 @@ RUN apt-get -qq update && apt-get install -y \
     man \
     lynx \ 
     unzip \
+    less \
+    ksh \
+    fish \
+    zsh \
+    tcsh \ 
     && apt-get clean
 RUN python3.11 -m pip -q install --upgrade pip
 
