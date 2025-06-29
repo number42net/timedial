@@ -47,6 +47,21 @@ services:
       - timedial-data:/data:ro
       - timedial-home:/home
       - certbot-etc:/etc/letsencrypt
+  ftp:
+    container_name: timedial-ftp
+    # profiles: [production]
+    build: sidecars/ftp
+    ports:
+      - "21:21"
+      - "990:990"
+      - "40000-40100:40000-40100"  # Passive data ports
+    volumes:
+      - type: bind
+        source: logs/archive
+        target: /var/log/archive
+      - timedial-data:/data:ro
+      - timedial-home:/home
+      - certbot-etc:/etc/letsencrypt
   slowproxy:
     container_name: timedial-slowproxy
     build: sidecars/slowproxy
