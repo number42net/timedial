@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["timedial"]
+include = ["timedial*"]
 
 [project.scripts]
 timedial-priv-create-user = "timedial.accounts.create_user:create_user"
