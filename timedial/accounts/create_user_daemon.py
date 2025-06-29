@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import argparse
 import logging
 import os
 import re
@@ -35,6 +36,11 @@ USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+$")
 
 auth_logger_config()
 logger = logging.getLogger("timedial.crd")
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--no-home-dir", action="store_true", help="If set, do not create the home directory.")
+
+args = parser.parse_args()
 
 
 def process_file(path: str) -> None:
@@ -73,6 +79,29 @@ def process_file(path: str) -> None:
         )
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to create group {username}: {e}")
+
+    if args.no_home_dir:
+        try:
+            logger.info(f"Creating user: {username}")
+            subprocess.run(
+                [
+                    "useradd",
+                    "-M",
+                    "-s",
+                    "/usr/sbin/nologin",
+                    "-u",
+                    str(userdata.id[0]),
+                    "-g",
+                    str(userdata.id[1]),
+                    "-G",
+                    "guestusers",
+                    username,
+                ],
+                check=True,
+            )
+            return
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Failed to create user {username}: {e}")
 
     try:
         logger.info(f"Creating user: {username}")
